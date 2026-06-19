@@ -1,17 +1,16 @@
 package pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
+import io.qameta.allure.Step;
+import utils.LogUtil;
 
-public class LoginPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
+/**
+ * LoginPage - Page Object for login functionality
+ */
+public class LoginPage extends BasePage {
 
+    // Locators
     private By lickUserLogin = By.xpath("(//span[contains(text(),'Tài khoản')])[1]");
     private By usernameField = By.id("js-login-email");
     private By passwordField = By.id("js-login-password");
@@ -19,47 +18,71 @@ public class LoginPage {
     private By loginSuccessfully = By.xpath("(//div[@class='box-account background-white d-flex'])[1]");
 
     public LoginPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        super(driver);
+        LogUtil.info("LoginPage initialized");
     }
 
-    public void click() {
-        driver.findElement(lickUserLogin).click();
+    /**
+     * Click on login menu
+     */
+    @Step("Click on login menu")
+    public void clickLoginMenu() {
+        LogUtil.info("Clicking on login menu");
+        click(lickUserLogin);
     }
 
-    // 3. Các hành động (Methods) trên trang này
-
-    public void enterUsername(String user) {
-        driver.findElement(usernameField).sendKeys(user);
+    /**
+     * Enter email
+     */
+    @Step("Enter email: {email}")
+    public void enterUsername(String email) {
+        LogUtil.info("Entering email: " + email);
+        type(usernameField, email);
     }
 
-    public void enterPassword(String pass) {
-        driver.findElement(passwordField).sendKeys(pass);
+    /**
+     * Enter password
+     */
+    @Step("Enter password")
+    public void enterPassword(String password) {
+        LogUtil.info("Entering password");
+        type(passwordField, password);
     }
 
-    // Dùng Javascript để click nếu bị che khuất
+    /**
+     * Click login button
+     */
+    @Step("Click login button")
     public void clickLogin() {
-        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(loginButton));
+        LogUtil.info("Clicking login button");
         try {
-            button.click();
+            click(loginButton);
         } catch (Exception e) {
-            JavascriptExecutor executor = (JavascriptExecutor) driver;
-            executor.executeScript("arguments[0].click();", button);
+            LogUtil.warn("Standard click failed, trying JavaScript click");
+            jsClick(loginButton);
         }
     }
 
+    /**
+     * Check if login is successful
+     */
+    @Step("Verify login is successful")
     public boolean isLoginSuccessful() {
-        try {
-            return wait.until(ExpectedConditions.visibilityOfElementLocated(loginSuccessfully)).isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
+        LogUtil.info("Verifying if login is successful");
+        boolean result = isElementDisplayed(loginSuccessfully);
+        LogUtil.info("Login successful: " + result);
+        return result;
     }
 
-    public void login(String user, String pass) {
-        click();
-        enterUsername(user);
-        enterPassword(pass);
+    /**
+     * Perform login
+     */
+    @Step("Login with email: {email}")
+    public void login(String email, String password) {
+        LogUtil.info("Performing login with email: " + email);
+        clickLoginMenu();
+        enterUsername(email);
+        enterPassword(password);
         clickLogin();
     }
 }

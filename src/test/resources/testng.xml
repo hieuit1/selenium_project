@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-current.dtd">
+
+<suite name="Selenium Automation Test Suite" parallel="false" thread-count="1">
+    <test name="Login Tests">
+        <classes>
+            <class name="tests.LoginTest">
+                <methods>
+                    <include name="testLoginSuccessfully"/>
+                    <include name="testLoginWithSingleStep"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
