@@ -2,76 +2,79 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
 import io.qameta.allure.Step;
 import utils.LogUtil;
+import utils.WaitUtil;
 
 /**
  * LoginPage - Page Object for login functionality
  */
 public class LoginPage extends BasePage {
 
+    public LoginPage(WebDriver driver) {
+        super(driver);
+    }
+
     // Locators
     private By lickUserLogin = By.xpath("(//span[contains(text(),'Tài khoản')])[1]");
-    private By usernameField = By.id("js-login-email");
-    private By passwordField = By.id("js-login-password");
+    private By usernameField = By.id("js-login-email"); // Đã khai báo là usernameField
+    private By passwordField = By.id("js-login-password"); // Đã khai báo là passwordField
     private By loginButton = By.xpath("(//a[@class='btn-submit'])[1]");
     private By loginSuccessfully = By.xpath("(//div[@class='box-account background-white d-flex'])[1]");
 
-    public LoginPage(WebDriver driver) {
-        super(driver);
-        LogUtil.info("LoginPage initialized");
-    }
-
-    /**
-     * Click on login menu
-     */
-    @Step("Click on login menu")
+    // 1. Hàm click vào menu "Tài khoản" trước khi đăng nhập
     public void clickLoginMenu() {
-        LogUtil.info("Clicking on login menu");
-        click(lickUserLogin);
+        stepWithScreenshot("Click menu Tài khoản", () -> {
+            WebElement menu = WaitUtil.waitForElementClickable(driver, lickUserLogin);
+            menu.click();
+        });
     }
 
-    /**
-     * Enter email
-     */
-    @Step("Enter email: {email}")
-    public void enterUsername(String email) {
-        LogUtil.info("Entering email: " + email);
-        type(usernameField, email);
+    public void enterUsername(String username) {
+        stepWithScreenshot("Nhập tên đăng nhập: " + username, () -> {
+            // Đã sửa 'usernameInput' thành 'usernameField' cho khớp với khai báo ở trên
+            WebElement userElement = WaitUtil.waitForElementVisible(driver, usernameField);
+            userElement.clear();
+            userElement.sendKeys(username);
+        });
     }
 
-    /**
-     * Enter password
-     */
-    @Step("Enter password")
     public void enterPassword(String password) {
-        LogUtil.info("Entering password");
-        type(passwordField, password);
+        stepWithScreenshot("Nhập mật khẩu", () -> {
+            // Đã sửa 'passwordInput' thành 'passwordField' cho khớp với khai báo ở trên
+            WebElement passElement = WaitUtil.waitForElementVisible(driver, passwordField);
+            passElement.clear();
+            passElement.sendKeys(password);
+        });
     }
 
-    /**
-     * Click login button
-     */
-    @Step("Click login button")
     public void clickLogin() {
-        LogUtil.info("Clicking login button");
+        stepWithScreenshot("Click nút Đăng nhập", () -> {
+            WebElement loginBtn = WaitUtil.waitForElementClickable(driver, loginButton);
+            // Thay vì dùng loginBtn.click(); bị chặn, ta dùng JavaScript để click ép buộc
+            org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver;
+            js.executeScript("arguments[0].click();", loginBtn);
+        });
+    }
+
+    // 2. Hàm kiểm tra xem đã đăng nhập thành công chưa
+    public boolean isLoginSuccessful() {
         try {
-            click(loginButton);
+            // Đợi cái hộp tài khoản xuất hiện
+            WebElement accountBox = WaitUtil.waitForElementVisible(driver, loginSuccessfully);
+            return accountBox.isDisplayed();
         } catch (Exception e) {
-            LogUtil.warn("Standard click failed, trying JavaScript click");
-            jsClick(loginButton);
+            return false; // Nếu sau 1 thời gian không thấy thì trả về false (đăng nhập thất bại)
         }
     }
 
-    /**
-     * Check if login is successful
-     */
-    @Step("Verify login is successful")
-    public boolean isLoginSuccessful() {
-        LogUtil.info("Verifying if login is successful");
-        boolean result = isElementDisplayed(loginSuccessfully);
-        LogUtil.info("Login successful: " + result);
-        return result;
+    // 3. Hàm chụp ảnh chủ động (nếu trong BasePage chưa có)
+    public void takeScreenshot(String stepName) {
+        stepWithScreenshot(stepName, () -> {
+            LogUtil.info("Chụp ảnh màn hình: " + stepName);
+        });
     }
 
     /**
@@ -80,7 +83,6 @@ public class LoginPage extends BasePage {
     @Step("Login with email: {email}")
     public void login(String email, String password) {
         LogUtil.info("Performing login with email: " + email);
-        clickLoginMenu();
         enterUsername(email);
         enterPassword(password);
         clickLogin();

@@ -1,13 +1,16 @@
 package tests;
 
 import org.openqa.selenium.WebDriver;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import java.lang.reflect.Method;
 import io.qameta.allure.Allure;
 import utils.DriverFactory;
 import utils.ConfigReader;
 import utils.LogUtil;
-import utils.ScreenshotUtil;
+// import utils.ScreenshotUtil;
+import utils.VideoRecorderUtil;
 
 /**
  * Base Test class with common setup and teardown
@@ -53,5 +56,21 @@ public class BaseTest {
     public void addInfoToReport(String info) {
         LogUtil.info(info);
         Allure.addDescription(info);
+    }
+
+    @BeforeMethod
+    public void setUp(Method method) throws Exception {
+        // Bắt đầu quay video, lấy tên video là tên của kịch bản test
+        VideoRecorderUtil.startRecord(method.getName());
+
+        // ... (các đoạn code khởi tạo trình duyệt cũ của bạn giữ nguyên)
+    }
+
+    @AfterMethod
+    public void tearDown(ITestResult result) throws Exception {
+        // Tắt máy quay
+        VideoRecorderUtil.stopRecord();
+
+        // ... (đóng trình duyệt)
     }
 }

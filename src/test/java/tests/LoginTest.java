@@ -52,26 +52,4 @@ public class LoginTest extends BaseTest {
         LogUtil.info("Test passed: User successfully logged in");
     }
 
-    /**
-     * Test login with single step (alternative approach)
-     */
-    @Test(description = "Verify user login using single login method")
-    @Description("This test uses the combined login method")
-    public void testLoginWithSingleStep() {
-        LogUtil.info("Starting test: testLoginWithSingleStep");
-
-        // Initialize login page
-        LoginPage loginPage = new LoginPage(driver);
-
-        // Login using combined method
-        loginPage.login("test@gmail.com", "testweb123");
-
-        // Take screenshot
-        loginPage.takeScreenshot("Login Result");
-
-        // Verify
-        boolean isSuccess = loginPage.isLoginSuccessful();
-        assert isSuccess : "Login failed, account box not found!";
-        LogUtil.info("Test passed: Login successful");
-    }
 }

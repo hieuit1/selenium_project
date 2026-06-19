@@ -2,15 +2,21 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.Select;
+
+import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import utils.LogUtil;
 import utils.ScreenshotUtil;
 import utils.WaitUtil;
+
+import java.io.ByteArrayInputStream;
 import java.time.Duration;
 
 /**
@@ -202,5 +208,20 @@ public class BasePage {
             LogUtil.error("Text not found in element: " + text);
             return false;
         }
+    }
+
+    /**
+     * Hàm này giống hệt custom helper stepWithScreenshot bên Playwright của bạn
+     */
+    protected void stepWithScreenshot(String stepName, Runnable action) {
+        Allure.step(stepName, () -> {
+            // 1. Thực hiện hành động (click, nhập chữ...)
+            action.run();
+
+            // 2. Chụp ảnh màn hình ngay sau khi làm xong
+            byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            // 3. Đính kèm ảnh vào Allure Report
+            Allure.addAttachment("Screenshot sau bước: " + stepName, new ByteArrayInputStream(screenshot));
+        });
     }
 }
