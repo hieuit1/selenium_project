@@ -16,7 +16,7 @@ public class LoginTest {
     public void setup() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
-        driver.get("https://www.saucedemo.com/");
+        driver.get("https://www.tncstore.vn/");
 
         // Khởi tạo đối tượng LoginPage
         loginPage = new LoginPage(driver);
@@ -24,11 +24,11 @@ public class LoginTest {
 
     @Test
     public void testLoginSuccessfully() {
-        // Gọi hàm login từ Page Object
-        loginPage.login("standard_user", "secret_sauce");
+        loginPage.login("test@gmail.com", "testweb123");
 
-        // Kiểm tra kết quả
-        assert driver.getCurrentUrl().contains("inventory.html");
+        // Kiểm tra xem đăng nhập có thành công không thay vì dùng URL
+        boolean isSuccess = loginPage.isLoginSuccessful();
+        assert isSuccess : "Đăng nhập thất bại, không tìm thấy box tài khoản!";
     }
 
     @AfterMethod
