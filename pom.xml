@@ -82,13 +82,7 @@
       <artifactId>aspectjweaver</artifactId>
       <version>${aspectj.version} </version>
     </dependency>
-
-    <!-- record video -->
-    <dependency>
-            <groupId>com.github.stephenc.monte</groupId>
-            <artifactId>monte-screen-recorder</artifactId>
-            <version>0.7.7.0</version>
-    </dependency>
+    
   </dependencies>
 
   <build>
