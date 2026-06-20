@@ -50,11 +50,7 @@ public class DriverFactory {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
 
-        if (ConfigReader.isHeadlessMode()) {
-            options.addArguments("--headless");
-            LogUtil.info("Chrome running in headless mode");
-        }
-
+        options.addArguments("--headless=new");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
