@@ -7,57 +7,57 @@ on:
     # Chạy lúc 00:00 UTC mỗi ngày
     - cron: "0 0 * * *"
 
+# Cấp quyền cần thiết để đẩy code lên nhánh gh-pages và viết báo cáo
+permissions:
+  contents: write
+  checks: write
+  statuses: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: "21"
           distribution: "temurin"
           cache: maven
 
+      # Thêm continue-on-error để nếu test có lỗi (Fail), workflow vẫn chạy tiếp để tạo báo cáo
       - name: Run Selenium Tests
         run: mvn clean test
+        continue-on-error: true
 
-      - name: Generate Allure Report
-        if: always()
-        run: mvn allure:report
-
+      # --- CÁC BƯỚC LƯU TRỮ (ARTIFACTS) CỦA BẠN ---
       - name: Upload Test Results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: target/surefire-reports/
 
-      - name: Upload Allure Results
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: allure-results
-          path: target/allure-results/
-
       - name: Upload Screenshots
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: screenshots
           path: screenshots/
+          retention-days: 7 # Tự động xóa sau 7 ngày cho nhẹ bộ nhớ
 
       - name: Upload Logs
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: logs
           path: logs/
+          retention-days: 7
 
-      - name: Publish Test Report
+      - name: Publish Test Report (Dorny)
         if: always()
         uses: dorny/test-reporter@v1
         with:
@@ -65,3 +65,33 @@ jobs:
           path: "target/surefire-reports/*.xml"
           reporter: "java-junit"
           fail-on-error: false
+
+      # --- CÁC BƯỚC MỚI: TẠO VÀ DEPLOY ALLURE REPORT LÊN GITHUB PAGES ---
+
+      # 1. Lấy lịch sử chạy Allure từ nhánh gh-pages (để làm biểu đồ trend)
+      - name: Get Allure history
+        uses: actions/checkout@v4
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages-dir
+
+      # 2. Sinh ra giao diện Web Allure từ các file JSON thô
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        with:
+          allure_results: target/allure-results
+          allure_history: allure-history
+          gh_pages: gh-pages-dir
+          keep_reports: 20 # Giữ lại lịch sử của 20 lần chạy test gần nhất
+
+      # 3. Đẩy toàn bộ thư mục web Allure lên nhánh gh-pages
+      - name: Deploy Allure Report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history

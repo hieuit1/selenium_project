@@ -54,3 +54,6 @@ build/
 dist/
 .gradle/
 .m2/
+
+# Allure Commandline Tool
+.allure/
