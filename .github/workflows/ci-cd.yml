@@ -60,16 +60,6 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
-      - name: Publish Test Report (Dorny)
-        if: always()
-        uses: dorny/test-reporter@v1
-        continue-on-error: true
-        with:
-          name: Test Results
-          path: "target/surefire-reports/junitreports/TEST-*.xml"
-          reporter: "java-junit"
-          fail-on-error: false
-
       - name: Get Allure history
         uses: actions/checkout@v4
         if: always()
