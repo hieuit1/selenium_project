@@ -4,6 +4,8 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import io.qameta.allure.Allure;
+import io.qameta.allure.Attachment;
+
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -60,5 +62,20 @@ public class ScreenshotUtil {
                 LogUtil.error("Failed to attach failure screenshot: " + e.getMessage());
             }
         }
+    }
+
+    @Attachment(value = "Screenshot khi hoàn thành", type = "image/png")
+    public static byte[] captureScreenshot(WebDriver driver) {
+        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+    }
+
+    @Attachment(value = "Kết quả sau khi thực thi", type = "image/png")
+    public static byte[] takeScreenshot(WebDriver driver) {
+        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+    }
+
+    public static void saveResultScreenshot(WebDriver driver) {
+        // Gọi trực tiếp phương thức attachScreenshot đã có sẵn
+        attachScreenshot(driver, "Kết quả cuối cùng");
     }
 }

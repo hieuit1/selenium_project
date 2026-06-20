@@ -8,7 +8,7 @@ import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Allure;
 import listeners.TestListener;
 import pages.LoginPage;
-import utils.LogUtil;
+import utils.ScreenshotUtil;
 
 @Listeners(TestListener.class)
 public class LoginTest extends BaseTest {
@@ -41,5 +41,7 @@ public class LoginTest extends BaseTest {
             loginPage.takeScreenshot("Final Result"); // Chụp ảnh chốt hạ
             assert isSuccess : "Đăng nhập thất bại!";
         });
+
+        ScreenshotUtil.saveResultScreenshot(driver);
     }
 }

@@ -9,13 +9,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.Select;
-
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import utils.LogUtil;
 import utils.ScreenshotUtil;
-import utils.WaitUtil;
-
 import java.io.ByteArrayInputStream;
 import java.time.Duration;
 
