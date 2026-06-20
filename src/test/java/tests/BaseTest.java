@@ -13,52 +13,95 @@ import utils.ConfigReader;
 import utils.LogUtil;
 import utils.VideoRecorderUtil;
 
+/**
+ * Base Test class with video recording and driver management
+ */
 public class BaseTest {
 
     protected WebDriver driver;
+    private boolean isVideoRecordingEnabled;
 
     @BeforeMethod
     public void setup(Method method) throws Exception {
-        LogUtil.info("========== Starting Test ==========");
-        VideoRecorderUtil.startRecord(method.getName());
+        LogUtil.info("========== Starting Test: " + method.getName() + " ==========");
 
+        // Check if video recording is enabled
+        isVideoRecordingEnabled = ConfigReader.getVideoRecording();
+
+        // Start video recording
+        if (isVideoRecordingEnabled) {
+            try {
+                LogUtil.info("Starting video recording for test: " + method.getName());
+                VideoRecorderUtil.startRecord(method.getName());
+            } catch (Exception e) {
+                LogUtil.error("Failed to start video recording: " + e.getMessage());
+            }
+        }
+
+        // Initialize WebDriver
         String browser = ConfigReader.getBrowser();
+        LogUtil.info("Initializing WebDriver with browser: " + browser);
         driver = DriverFactory.initializeDriver(browser);
 
+        // Navigate to base URL
         String baseUrl = ConfigReader.getBaseUrl();
         DriverFactory.navigateTo(baseUrl);
+        LogUtil.info("Test setup completed successfully");
     }
 
     @AfterMethod
-    public void teardown(ITestResult result) throws Exception {
-        LogUtil.info("========== Ending Test ==========");
+    public void teardown(ITestResult result, Method method) throws Exception {
+        LogUtil.info("========== Ending Test: " + method.getName() + " ==========");
 
-        // 1. Tắt máy quay video trước
-        VideoRecorderUtil.stopRecord();
+        // Get test result
+        String testStatus = result.isSuccess() ? "PASSED" : "FAILED";
+        LogUtil.info("Test Status: " + testStatus);
 
-        // 2. Tiến hành đính kèm Video vừa quay vào Allure Report
-        try {
-            // Đường dẫn tới file video vừa quay (tên file thường được sinh ra dựa trên tên
-            // method test)
-            File videoFolder = new File("./test-recordings/");
-            // Tìm file video mới nhất liên quan đến test case này
-            File[] files = videoFolder
-                    .listFiles((dir, name) -> name.contains(result.getName()) && name.endsWith(".avi"));
+        // Stop video recording and attach to Allure
+        if (isVideoRecordingEnabled) {
+            try {
+                LogUtil.info("Stopping video recording...");
+                VideoRecorderUtil.stopRecord();
 
-            if (files != null && files.length > 0) {
-                File targetVideo = files[files.length - 1]; // Lấy file mới nhất
-                // Đính kèm vào Allure dưới dạng tập tin đính kèm
-                Allure.addAttachment("Test Execution Video Clip", "video/avi",
-                        Files.newInputStream(targetVideo.toPath()), ".avi");
+                // Attach video to Allure report
+                File videoFile = new File("./test-recordings/" + method.getName() + ".avi");
+                if (videoFile.exists()) {
+                    long videoSize = videoFile.length() / (1024 * 1024); // Size in MB
+                    LogUtil.info("Video file created: " + videoFile.getAbsolutePath() + " (" + videoSize + " MB)");
+
+                    try {
+                        Allure.addAttachment(
+                                "Test Video - " + testStatus,
+                                "video/avi",
+                                Files.newInputStream(videoFile.toPath()),
+                                "avi");
+                        LogUtil.info("Video attached to Allure report successfully");
+                    } catch (Exception e) {
+                        LogUtil.error("Failed to attach video to Allure: " + e.getMessage());
+                    }
+                } else {
+                    LogUtil.warn("Video file not found: " + videoFile.getAbsolutePath());
+                }
+            } catch (Exception e) {
+                LogUtil.error("Error during video recording stop: " + e.getMessage());
             }
-        } catch (Exception e) {
-            LogUtil.error("Không thể đính kèm video vào Allure Report: " + e.getMessage());
         }
 
-        // 3. Đóng trình duyệt dọn dẹp môi trường
+        // Close WebDriver
         if (driver != null) {
+            LogUtil.info("Closing WebDriver...");
             DriverFactory.quitDriver();
-            LogUtil.info("Driver closed");
+            LogUtil.info("WebDriver closed successfully");
         }
+
+        LogUtil.info("Test teardown completed");
+    }
+
+    /**
+     * Add description to Allure report
+     */
+    public void addInfoToReport(String info) {
+        LogUtil.info(info);
+        Allure.addDescription(info);
     }
 }

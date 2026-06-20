@@ -32,6 +32,12 @@ logs/
 # Screenshots
 screenshots/
 
+# Test Recordings & Videos
+test-recordings/
+*.avi
+*.mp4
+*.mov
+
 # Allure Report
 allure-report/
 target/allure-results/

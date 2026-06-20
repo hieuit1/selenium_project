@@ -110,7 +110,59 @@ headless.mode=true
 
 ---
 
-## 📊 Allure Report
+## 🎬 Video Recording & Screenshots
+
+### Automatic Video Recording
+
+Every test is automatically recorded as a video (AVI format):
+
+```bash
+# Run tests - videos will be recorded
+mvn clean test
+
+# Videos are saved in:
+test-recordings/
+├── testLoginSuccessfully.avi
+└── testLoginWithSingleStep.avi
+```
+
+### Configuration
+
+**Enable/Disable Video Recording:**
+
+```properties
+# src/test/resources/config.properties
+video.recording=true      # Enable video
+screenshot.on.failure=true # Screenshot on failure
+```
+
+### View Results with Videos
+
+```bash
+# Generate Allure report
+mvn allure:report
+
+# Open in browser (videos embedded in report)
+mvn allure:serve
+```
+
+**Report includes:**
+
+- 🎬 **Videos** - Full screen recording of each test
+- 📸 **Screenshots** - Captured when test fails
+- 📝 **Logs** - Detailed step-by-step execution
+- 📊 **Metrics** - Test statistics and duration
+
+---
+
+## 📚 Documentation
+
+- **[QUICK_START.md](QUICK_START.md)** - 30 second quick start
+- **[VIDEO_AND_SCREENSHOT_GUIDE.md](VIDEO_AND_SCREENSHOT_GUIDE.md)** - Complete video/screenshot guide
+- **[IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)** - Detailed implementation plan
+- **[PROGRESS.md](PROGRESS.md)** - Implementation progress tracker
+
+---
 
 ### Generate Report
 
