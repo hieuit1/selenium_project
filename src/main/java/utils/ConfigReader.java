@@ -81,11 +81,4 @@ public class ConfigReader {
         return Boolean.parseBoolean(screenshot);
     }
 
-    /**
-     * Get video recording setting
-     */
-    public static boolean getVideoRecording() {
-        String video = getProperty("video.recording", "true");
-        return Boolean.parseBoolean(video);
-    }
 }

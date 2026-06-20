@@ -64,11 +64,6 @@ public class ScreenshotUtil {
         }
     }
 
-    @Attachment(value = "Screenshot khi hoàn thành", type = "image/png")
-    public static byte[] captureScreenshot(WebDriver driver) {
-        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-    }
-
     @Attachment(value = "Kết quả sau khi thực thi", type = "image/png")
     public static byte[] takeScreenshot(WebDriver driver) {
         return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
