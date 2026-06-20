@@ -4,11 +4,9 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.Listeners;
 import io.qameta.allure.Allure;
 import utils.ScreenshotUtil;
 import utils.LogUtil;
-import utils.DriverFactory;
 
 /**
  * Test Listener - captures screenshots on test failure

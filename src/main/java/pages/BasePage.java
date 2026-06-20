@@ -16,9 +16,6 @@ import utils.ScreenshotUtil;
 import java.io.ByteArrayInputStream;
 import java.time.Duration;
 
-/**
- * Base Page class with common page methods
- */
 public class BasePage {
 
     protected WebDriver driver;

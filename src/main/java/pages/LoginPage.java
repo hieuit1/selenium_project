@@ -8,9 +8,6 @@ import io.qameta.allure.Step;
 import utils.LogUtil;
 import utils.WaitUtil;
 
-/**
- * LoginPage - Page Object for login functionality
- */
 public class LoginPage extends BasePage {
 
     public LoginPage(WebDriver driver) {
