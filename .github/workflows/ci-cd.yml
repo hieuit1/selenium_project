@@ -2,12 +2,10 @@ name: Selenium Tests CI/CD
 
 on:
   push:
-    branches: [main, develop]
+    branches: ["main", "develop"]
   schedule:
-    # Chạy lúc 00:00 UTC mỗi ngày
     - cron: "0 0 * * *"
 
-# Cấp quyền cần thiết để đẩy code lên nhánh gh-pages và viết báo cáo
 permissions:
   contents: write
   checks: write
@@ -28,18 +26,17 @@ jobs:
           distribution: "temurin"
           cache: maven
 
-      # Thêm continue-on-error để nếu test có lỗi (Fail), workflow vẫn chạy tiếp để tạo báo cáo
       - name: Run Selenium Tests
         run: mvn clean test
         continue-on-error: true
 
-      # --- CÁC BƯỚC LƯU TRỮ (ARTIFACTS) CỦA BẠN ---
       - name: Upload Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: target/surefire-reports/
+          if-no-files-found: ignore
 
       - name: Upload Screenshots
         if: always()
@@ -47,7 +44,8 @@ jobs:
         with:
           name: screenshots
           path: screenshots/
-          retention-days: 7 # Tự động xóa sau 7 ngày cho nhẹ bộ nhớ
+          retention-days: 7
+          if-no-files-found: ignore
 
       - name: Upload Logs
         if: always()
@@ -56,19 +54,18 @@ jobs:
           name: logs
           path: logs/
           retention-days: 7
+          if-no-files-found: ignore
 
       - name: Publish Test Report (Dorny)
         if: always()
         uses: dorny/test-reporter@v1
+        continue-on-error: true
         with:
           name: Test Results
           path: "target/surefire-reports/*.xml"
           reporter: "java-junit"
           fail-on-error: false
 
-      # --- CÁC BƯỚC MỚI: TẠO VÀ DEPLOY ALLURE REPORT LÊN GITHUB PAGES ---
-
-      # 1. Lấy lịch sử chạy Allure từ nhánh gh-pages (để làm biểu đồ trend)
       - name: Get Allure history
         uses: actions/checkout@v4
         if: always()
@@ -77,7 +74,6 @@ jobs:
           ref: gh-pages
           path: gh-pages-dir
 
-      # 2. Sinh ra giao diện Web Allure từ các file JSON thô
       - name: Generate Allure Report
         uses: simple-elf/allure-report-action@master
         if: always()
@@ -85,9 +81,8 @@ jobs:
           allure_results: target/allure-results
           allure_history: allure-history
           gh_pages: gh-pages-dir
-          keep_reports: 20 # Giữ lại lịch sử của 20 lần chạy test gần nhất
+          keep_reports: 20
 
-      # 3. Đẩy toàn bộ thư mục web Allure lên nhánh gh-pages
       - name: Deploy Allure Report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         if: always()

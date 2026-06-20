@@ -72,7 +72,7 @@ public class DriverFactory {
         FirefoxOptions options = new FirefoxOptions();
 
         if (ConfigReader.isHeadlessMode()) {
-            options.addArguments("--headless");
+            options.addArguments("--headless=new");
             LogUtil.info("Firefox running in headless mode");
         }
 
