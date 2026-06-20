@@ -10,6 +10,8 @@ permissions:
   contents: write
   checks: write
   statuses: write
+  pages: write
+  id-token: write
 
 jobs:
   test:
@@ -29,7 +31,7 @@ jobs:
           cache: maven
 
       - name: Run Selenium Tests
-        run: mvn clean test
+        run: mvn clean test -Dsurefire.failIfNoSpecifiedTests=false
         continue-on-error: true
 
       - name: Upload Test Results
@@ -64,7 +66,7 @@ jobs:
         continue-on-error: true
         with:
           name: Test Results
-          path: "target/surefire-reports/TEST-*.xml"
+          path: "target/surefire-reports/junitreports/TEST-*.xml"
           reporter: "java-junit"
           fail-on-error: false
 
@@ -79,6 +81,7 @@ jobs:
       - name: Generate Allure Report
         uses: simple-elf/allure-report-action@master
         if: always()
+        continue-on-error: true
         with:
           allure_results: target/allure-results
           allure_history: allure-history
@@ -88,8 +91,11 @@ jobs:
       - name: Deploy Allure Report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: always()
+        continue-on-error: true
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-history
           allow_empty_commit: true
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
