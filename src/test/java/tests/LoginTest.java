@@ -1,14 +1,13 @@
 package tests;
 
+import org.testng.Assert; // Thêm import Assert của TestNG
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-import io.qameta.allure.Allure;
 import listeners.TestListener;
 import pages.LoginPage;
-import utils.ScreenshotUtil;
 
 @Listeners(TestListener.class)
 public class LoginTest extends BaseTest {
@@ -19,29 +18,19 @@ public class LoginTest extends BaseTest {
     public void testLoginSuccessfully() {
         LoginPage loginPage = new LoginPage(driver);
 
-        // Step 1
-        Allure.step("Step 1: Navigate and Open Login Menu", () -> {
-            loginPage.clickLoginMenu();
-        });
+        // Các bước này sẽ tự động được ghi vào Allure nhờ @Step đã gắn bên LoginPage
+        loginPage.clickLoginMenu();
+        loginPage.enterUsername("test@gmail.com");
+        loginPage.enterPassword("testweb123");
+        loginPage.clickLogin();
 
-        // Step 2
-        Allure.step("Step 2: Enter Credentials", () -> {
-            loginPage.enterUsername("test@gmail.com");
-            loginPage.enterPassword("testweb123");
-        });
+        // Kiểm tra kết quả
+        boolean isSuccess = loginPage.isLoginSuccessful();
 
-        // Step 3
-        Allure.step("Step 3: Submit Login Form", () -> {
-            loginPage.clickLogin();
-        });
+        // Chụp ảnh chốt hạ kết quả cuối cùng để làm bằng chứng
+        loginPage.takeScreenshot("Kết quả sau khi Đăng Nhập");
 
-        // Step 4
-        Allure.step("Step 4: Verify Login Success", () -> {
-            boolean isSuccess = loginPage.isLoginSuccessful();
-            loginPage.takeScreenshot("Final Result"); // Chụp ảnh chốt hạ
-            assert isSuccess : "Đăng nhập thất bại!";
-        });
-
-        ScreenshotUtil.saveResultScreenshot(driver);
+        // Dùng Assert của TestNG
+        Assert.assertTrue(isSuccess, "Đăng nhập thất bại! Không tìm thấy hộp tài khoản hiển thị.");
     }
 }
