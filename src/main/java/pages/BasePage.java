@@ -9,8 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.Select;
-import io.qameta.allure.Allure;
-import io.qameta.allure.Step;
+import io.qameta.allure.Allure; // Giữ lại Allure để dùng cho stepWithScreenshot
 import utils.LogUtil;
 import utils.ScreenshotUtil;
 import java.io.ByteArrayInputStream;
@@ -35,7 +34,6 @@ public class BasePage {
     /**
      * Click on element
      */
-    @Step("Click on element: {locator}")
     public void click(By locator) {
         LogUtil.info("Clicking on element: " + locator);
         wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
@@ -44,7 +42,6 @@ public class BasePage {
     /**
      * Type text into element
      */
-    @Step("Type text into element: {locator} - Text: {text}")
     public void type(By locator, String text) {
         LogUtil.info("Typing '" + text + "' into element: " + locator);
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
@@ -55,7 +52,6 @@ public class BasePage {
     /**
      * Get text from element
      */
-    @Step("Get text from element: {locator}")
     public String getText(By locator) {
         LogUtil.info("Getting text from element: " + locator);
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).getText();
@@ -64,7 +60,6 @@ public class BasePage {
     /**
      * Check if element is displayed
      */
-    @Step("Check if element is displayed: {locator}")
     public boolean isElementDisplayed(By locator) {
         LogUtil.info("Checking if element is displayed: " + locator);
         try {
@@ -78,7 +73,6 @@ public class BasePage {
     /**
      * Check if element exists
      */
-    @Step("Check if element exists: {locator}")
     public boolean isElementPresent(By locator) {
         LogUtil.info("Checking if element exists: " + locator);
         try {
@@ -92,7 +86,6 @@ public class BasePage {
     /**
      * Wait for element to be visible
      */
-    @Step("Wait for element to be visible: {locator}")
     public WebElement waitForElement(By locator) {
         LogUtil.info("Waiting for element: " + locator);
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
@@ -101,7 +94,6 @@ public class BasePage {
     /**
      * Wait for element to be clickable
      */
-    @Step("Wait for element to be clickable: {locator}")
     public WebElement waitForClickable(By locator) {
         LogUtil.info("Waiting for element to be clickable: " + locator);
         return wait.until(ExpectedConditions.elementToBeClickable(locator));
@@ -110,7 +102,6 @@ public class BasePage {
     /**
      * Clear and type
      */
-    @Step("Clear and type: {text}")
     public void clearAndType(By locator, String text) {
         LogUtil.info("Clearing and typing into element: " + locator);
         WebElement element = waitForElement(locator);
@@ -121,7 +112,6 @@ public class BasePage {
     /**
      * JavaScript click
      */
-    @Step("JavaScript click on element")
     public void jsClick(By locator) {
         LogUtil.info("JavaScript click on element: " + locator);
         WebElement element = waitForElement(locator);
@@ -132,7 +122,6 @@ public class BasePage {
     /**
      * Scroll to element
      */
-    @Step("Scroll to element")
     public void scrollToElement(By locator) {
         LogUtil.info("Scrolling to element: " + locator);
         WebElement element = driver.findElement(locator);
@@ -143,7 +132,6 @@ public class BasePage {
     /**
      * Select dropdown by value
      */
-    @Step("Select dropdown by value: {value}")
     public void selectDropdownByValue(By locator, String value) {
         LogUtil.info("Selecting dropdown value: " + value);
         Select select = new Select(waitForElement(locator));
@@ -153,7 +141,6 @@ public class BasePage {
     /**
      * Select dropdown by visible text
      */
-    @Step("Select dropdown by text: {text}")
     public void selectDropdownByText(By locator, String text) {
         LogUtil.info("Selecting dropdown text: " + text);
         Select select = new Select(waitForElement(locator));
@@ -163,7 +150,6 @@ public class BasePage {
     /**
      * Get attribute value
      */
-    @Step("Get attribute value: {attribute}")
     public String getAttribute(By locator, String attribute) {
         LogUtil.info("Getting attribute '" + attribute + "' from element: " + locator);
         return waitForElement(locator).getAttribute(attribute);
@@ -172,7 +158,6 @@ public class BasePage {
     /**
      * Wait for URL to contain
      */
-    @Step("Wait for URL to contain: {urlPortion}")
     public boolean waitForUrl(String urlPortion) {
         LogUtil.info("Waiting for URL to contain: " + urlPortion);
         return wait.until(ExpectedConditions.urlContains(urlPortion));
@@ -181,7 +166,6 @@ public class BasePage {
     /**
      * Get current URL
      */
-    @Step("Get current URL")
     public String getCurrentUrl() {
         LogUtil.info("Getting current URL");
         return driver.getCurrentUrl();
@@ -190,7 +174,6 @@ public class BasePage {
     /**
      * Take screenshot
      */
-    @Step("Take screenshot: {name}")
     public void takeScreenshot(String name) {
         ScreenshotUtil.attachScreenshot(driver, name);
     }
@@ -198,7 +181,6 @@ public class BasePage {
     /**
      * Wait for text in element
      */
-    @Step("Wait for text '{text}' in element")
     public boolean waitForText(By locator, String text) {
         LogUtil.info("Waiting for text '" + text + "' in element: " + locator);
         try {
@@ -209,6 +191,7 @@ public class BasePage {
         }
     }
 
+    // Giữ lại hàm này để dùng chụp ảnh linh hoạt ở tầng Page
     protected void stepWithScreenshot(String stepName, Runnable action) {
         Allure.step(stepName, () -> {
             action.run();

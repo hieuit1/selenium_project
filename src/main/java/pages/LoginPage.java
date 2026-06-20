@@ -19,20 +19,19 @@ public class LoginPage extends BasePage {
     private By loginSuccessfully = By.xpath("(//div[@class='box-account background-white d-flex'])[1]");
 
     // 1. Click menu Tài khoản
+    @Step("Click menu Tài khoản")
     public void clickLoginMenu() {
-        stepWithScreenshot("Click menu Tài khoản", () -> {
-            jsClick(clickUserLogin);
-        });
+        jsClick(clickUserLogin);
     }
 
     // 2. Nhập tên đăng nhập
+    @Step("Nhập tên đăng nhập: {username}")
     public void enterUsername(String username) {
-        stepWithScreenshot("Nhập tên đăng nhập: " + username, () -> {
-            type(usernameField, username);
-        });
+        type(usernameField, username);
     }
 
     // 3. Nhập mật khẩu
+    @Step("Nhập mật khẩu")
     public void enterPassword(String password) {
         stepWithScreenshot("Nhập mật khẩu", () -> {
             type(passwordField, password);
@@ -52,7 +51,7 @@ public class LoginPage extends BasePage {
         return isElementDisplayed(loginSuccessfully);
     }
 
-    @Step("Login with email: {email}")
+    @Step("Thực hiện Đăng nhập với tài khoản: {email}")
     public void login(String email, String password) {
         LogUtil.info("Performing login with email: " + email);
         enterUsername(email);
