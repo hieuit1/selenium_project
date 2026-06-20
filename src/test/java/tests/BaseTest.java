@@ -5,72 +5,60 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import java.lang.reflect.Method;
+import java.io.File;
+import java.nio.file.Files;
 import io.qameta.allure.Allure;
 import utils.DriverFactory;
 import utils.ConfigReader;
 import utils.LogUtil;
-// import utils.ScreenshotUtil;
 import utils.VideoRecorderUtil;
 
-/**
- * Base Test class with common setup and teardown
- */
 public class BaseTest {
 
     protected WebDriver driver;
 
-    /**
-     * Setup method - runs before each test
-     */
     @BeforeMethod
-    public void setup() {
+    public void setup(Method method) throws Exception {
         LogUtil.info("========== Starting Test ==========");
-        String browser = ConfigReader.getBrowser();
-        LogUtil.info("Browser: " + browser);
+        VideoRecorderUtil.startRecord(method.getName());
 
-        // Initialize driver
+        String browser = ConfigReader.getBrowser();
         driver = DriverFactory.initializeDriver(browser);
 
-        // Navigate to base URL
         String baseUrl = ConfigReader.getBaseUrl();
         DriverFactory.navigateTo(baseUrl);
-
-        LogUtil.info("Test setup completed");
     }
 
-    /**
-     * Teardown method - runs after each test
-     */
     @AfterMethod
-    public void teardown() {
+    public void teardown(ITestResult result) throws Exception {
         LogUtil.info("========== Ending Test ==========");
+
+        // 1. Tắt máy quay video trước
+        VideoRecorderUtil.stopRecord();
+
+        // 2. Tiến hành đính kèm Video vừa quay vào Allure Report
+        try {
+            // Đường dẫn tới file video vừa quay (tên file thường được sinh ra dựa trên tên
+            // method test)
+            File videoFolder = new File("./test-recordings/");
+            // Tìm file video mới nhất liên quan đến test case này
+            File[] files = videoFolder
+                    .listFiles((dir, name) -> name.contains(result.getName()) && name.endsWith(".avi"));
+
+            if (files != null && files.length > 0) {
+                File targetVideo = files[files.length - 1]; // Lấy file mới nhất
+                // Đính kèm vào Allure dưới dạng tập tin đính kèm
+                Allure.addAttachment("Test Execution Video Clip", "video/avi",
+                        Files.newInputStream(targetVideo.toPath()), ".avi");
+            }
+        } catch (Exception e) {
+            LogUtil.error("Không thể đính kèm video vào Allure Report: " + e.getMessage());
+        }
+
+        // 3. Đóng trình duyệt dọn dẹp môi trường
         if (driver != null) {
             DriverFactory.quitDriver();
             LogUtil.info("Driver closed");
         }
-    }
-
-    /**
-     * Add text to Allure report
-     */
-    public void addInfoToReport(String info) {
-        LogUtil.info(info);
-        Allure.addDescription(info);
-    }
-
-    @BeforeMethod
-    public void setUp(Method method) throws Exception {
-        // Bắt đầu quay video, lấy tên video là tên của kịch bản test
-        VideoRecorderUtil.startRecord(method.getName());
-
-        // ... (các đoạn code khởi tạo trình duyệt cũ của bạn giữ nguyên)
-    }
-
-    @AfterMethod
-    public void tearDown(ITestResult result) throws Exception {
-        // Tắt máy quay
-        VideoRecorderUtil.stopRecord();
-
-        // ... (đóng trình duyệt)
     }
 }

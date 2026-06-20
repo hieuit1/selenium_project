@@ -27,8 +27,12 @@ public class LoginPage extends BasePage {
     // 1. Hàm click vào menu "Tài khoản" trước khi đăng nhập
     public void clickLoginMenu() {
         stepWithScreenshot("Click menu Tài khoản", () -> {
+            // Vẫn đợi phần tử hiện ra
             WebElement menu = WaitUtil.waitForElementClickable(driver, lickUserLogin);
-            menu.click();
+
+            // Dùng Javascript để click, bỏ qua vật cản
+            org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver;
+            js.executeScript("arguments[0].click();", menu);
         });
     }
 

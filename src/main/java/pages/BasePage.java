@@ -33,6 +33,11 @@ public class BasePage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(TIMEOUT));
     }
 
+    public void clickByJS(WebElement element) {
+        org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver;
+        js.executeScript("arguments[0].click();", element);
+    }
+
     /**
      * Click on element
      */
@@ -210,18 +215,12 @@ public class BasePage {
         }
     }
 
-    /**
-     * Hàm này giống hệt custom helper stepWithScreenshot bên Playwright của bạn
-     */
     protected void stepWithScreenshot(String stepName, Runnable action) {
         Allure.step(stepName, () -> {
-            // 1. Thực hiện hành động (click, nhập chữ...)
             action.run();
-
-            // 2. Chụp ảnh màn hình ngay sau khi làm xong
+            // LUÔN LUÔN chụp ảnh sau khi hành động kết thúc
             byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-            // 3. Đính kèm ảnh vào Allure Report
-            Allure.addAttachment("Screenshot sau bước: " + stepName, new ByteArrayInputStream(screenshot));
+            Allure.addAttachment("Screenshot: " + stepName, new ByteArrayInputStream(screenshot));
         });
     }
 }
