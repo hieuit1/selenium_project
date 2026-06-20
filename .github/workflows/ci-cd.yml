@@ -100,25 +100,16 @@ jobs:
           user_name: "github-actions[bot]"
           user_email: "github-actions[bot]@users.noreply.github.com"
 
-          - name: Publish Test Report Link to Job Summary
+      - name: Publish Test Report Link to Job Summary
         if: always()
         run: |
           echo "## 📊 KẾT QUẢ KIỂM THỬ TỰ ĐỘNG (AUTOMATION TEST REPORT)" >> $GITHUB_STEP_SUMMARY
           echo "Hệ thống CI/CD đã hoàn thành tiến trình chạy kiểm thử và trích xuất báo cáo thành công." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "<table>" >> $GITHUB_STEP_SUMMARY
-          echo "  <tr>" >> $GITHUB_STEP_SUMMARY
-          echo "    <td><b>Dự án</b></td>" >> $GITHUB_STEP_SUMMARY
-          echo "    <td>Selenium Automation Project</td>" >> $GITHUB_STEP_SUMMARY
-          echo "  </tr>" >> $GITHUB_STEP_SUMMARY
-          echo "  <tr>" >> $GITHUB_STEP_SUMMARY
-          echo "    <td><b>Trạng thái CI/CD</b></td>" >> $GITHUB_STEP_SUMMARY
-          echo "    <td>✅ Hoàn tất tiến trình</td>" >> $GITHUB_STEP_SUMMARY
-          echo "  </tr>" >> $GITHUB_STEP_SUMMARY
-          echo "  <tr>" >> $GITHUB_STEP_SUMMARY
-          echo "    <td><b>Báo cáo nghiệm thu</b></td>" >> $GITHUB_STEP_SUMMARY
-          echo "    <td>👉 <b><a href='https://hieuit1.github.io/selenium_project/' target='_blank'>CLICK VÀO ĐÂY ĐỂ XEM ALLURE REPORT CHI TIẾT</a></b></td>" >> $GITHUB_STEP_SUMMARY
-          echo "  </tr>" >> $GITHUB_STEP_SUMMARY
-          echo "</table>" >> $GITHUB_STEP_SUMMARY
+          echo "| Hạng mục | Thông tin chi tiết |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Dự án** | Selenium Automation Project |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Trạng thái CI/CD** | ✅ Hoàn tất tiến trình |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Báo cáo nghiệm thu** | 👉 **[CLICK VÀO ĐÂY ĐỂ XEM ALLURE REPORT](https://hieuit1.github.io/selenium_project/)** |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "*Báo cáo được khởi tạo tự động qua nền tảng Allure Report.*" >> $GITHUB_STEP_SUMMARY
