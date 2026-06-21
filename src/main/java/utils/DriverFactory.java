@@ -37,9 +37,7 @@ public class DriverFactory {
                 break;
         }
 
-        if (ConfigReader.isHeadlessMode()) {
-            driver.manage().window().setSize(new org.openqa.selenium.Dimension(1920, 1080));
-        } else {
+        if (!ConfigReader.isHeadlessMode()) {
             driver.manage().window().maximize();
         }
         LogUtil.info("WebDriver initialized successfully");
@@ -56,6 +54,7 @@ public class DriverFactory {
 
         if (ConfigReader.isHeadlessMode()) {
             options.addArguments("--headless=new");
+            options.addArguments("--force-device-scale-factor=1");
             LogUtil.info("Chrome running in headless mode");
         }
         options.addArguments("--window-size=1920,1080");
@@ -75,7 +74,9 @@ public class DriverFactory {
         FirefoxOptions options = new FirefoxOptions();
 
         if (ConfigReader.isHeadlessMode()) {
-            options.addArguments("--headless=new");
+            options.addArguments("--headless");
+            options.addArguments("--width=1920");
+            options.addArguments("--height=1080");
             LogUtil.info("Firefox running in headless mode");
         }
 
@@ -90,7 +91,8 @@ public class DriverFactory {
         EdgeOptions options = new EdgeOptions();
 
         if (ConfigReader.isHeadlessMode()) {
-            options.addArguments("--headless");
+            options.addArguments("--headless=new");
+            options.addArguments("--window-size=1920,1080");
             LogUtil.info("Edge running in headless mode");
         }
 
