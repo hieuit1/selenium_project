@@ -16,7 +16,7 @@ public class LogUtil {
      */
     public static void info(String message) {
         logger.info(message);
-        Allure.step(message);
+        addAllureStep(message);
     }
 
     /**
@@ -24,7 +24,7 @@ public class LogUtil {
      */
     public static void error(String message) {
         logger.error(message);
-        Allure.step(message);
+        addAllureStep(message);
     }
 
     /**
@@ -39,7 +39,7 @@ public class LogUtil {
      */
     public static void warn(String message) {
         logger.warn(message);
-        Allure.step(message);
+        addAllureStep(message);
     }
 
     /**
@@ -47,6 +47,16 @@ public class LogUtil {
      */
     public static void error(String message, Throwable e) {
         logger.error(message, e);
-        Allure.step(message + ": " + e.getMessage());
+        addAllureStep(message + ": " + e.getMessage());
+    }
+
+    private static void addAllureStep(String message) {
+        try {
+            if (Allure.getLifecycle().getCurrentTestCase().isPresent()) {
+                Allure.step(message);
+            }
+        } catch (Exception e) {
+            // Ignore Allure step errors
+        }
     }
 }

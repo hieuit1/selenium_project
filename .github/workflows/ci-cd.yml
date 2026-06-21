@@ -15,14 +15,14 @@ permissions:
   id-token: write
 
 jobs:
-  # Job 1: Chạy test song song trên 5 máy ảo (Sharding)
+  # Job 1: Chạy test song song trên 3 máy ảo (Sharding)
   test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        shardIndex: [1, 2, 3, 4, 5]
-        shardTotal: [5]
+        shardIndex: [1, 2, 3]
+        shardTotal: [3]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

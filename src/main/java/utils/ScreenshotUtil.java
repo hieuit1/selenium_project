@@ -69,15 +69,17 @@ public class ScreenshotUtil {
         return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
     }
 
-    @Attachment(value = "Kết quả sau khi thực thi", type = "image/png")
-    public static byte[] attachRootScreenshot(WebDriver driver) {
+    public static void attachRootScreenshot(WebDriver driver) {
         try {
-            LogUtil.info("Đã đính kèm ảnh Kết quả sau khi thực thi vào root Allure.");
-            // Allure sẽ tự động lấy byte[] này và tạo thành ảnh PNG trên report
-            return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            if (Allure.getLifecycle().getCurrentTestCase().isPresent()) {
+                LogUtil.info("Đã đính kèm ảnh Kết quả sau khi thực thi vào root Allure.");
+                byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+                Allure.addAttachment("Kết quả sau khi thực thi", "image/png", new ByteArrayInputStream(screenshot), ".png");
+            } else {
+                LogUtil.warn("Không thể đính kèm ảnh vì test case đã kết thúc (Allure lifecycle closed).");
+            }
         } catch (Exception e) {
             LogUtil.error("Không thể đính kèm ảnh: " + e.getMessage());
-            return new byte[0]; // Trả về mảng rỗng nếu lỗi để không làm sập chương trình
         }
     }
 }

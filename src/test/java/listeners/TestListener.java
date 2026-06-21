@@ -14,8 +14,10 @@ public class TestListener implements ITestListener {
     @Override
     public void onTestStart(ITestResult result) {
         LogUtil.info("Test Started: " + result.getName());
-        Allure.feature("Test Execution");
-        Allure.story(result.getName());
+        if (Allure.getLifecycle().getCurrentTestCase().isPresent()) {
+            Allure.feature("Test Execution");
+            Allure.story(result.getName());
+        }
     }
 
     @Override
@@ -52,7 +54,9 @@ public class TestListener implements ITestListener {
     @Override
     public void onStart(ITestContext context) {
         LogUtil.info("Test Suite Started: " + context.getName());
-        Allure.suite(context.getName());
+        if (Allure.getLifecycle().getCurrentTestCase().isPresent()) {
+            Allure.suite(context.getName());
+        }
     }
 
     @Override
