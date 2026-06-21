@@ -82,11 +82,12 @@ jobs:
       - name: Deploy Allure Report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: always()
-        continue-on-error: true
+        continue-on-error: false
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-history
+          force_orphan: true
           allow_empty_commit: true
           user_name: "github-actions[bot]"
           user_email: "github-actions[bot]@users.noreply.github.com"
