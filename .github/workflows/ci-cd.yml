@@ -17,6 +17,12 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # matrix sẽ tạo ra 5 job chạy song song, mỗi job có 1 shardIndex riêng
+        shardIndex: [1, 2, 3, 4, 5]
+        shardTotal: [5]
 
     steps:
       - name: Checkout code
@@ -32,14 +38,17 @@ jobs:
           cache: maven
 
       - name: Run Selenium Tests
-        run: mvn clean test -Dsurefire.failIfNoSpecifiedTests=false
+        run: |
+          mvn clean test -Dsurefire.failIfNoSpecifiedTests=false \
+          -DshardIndex=${{ matrix.shardIndex }} \
+          -DshardTotal=${{ matrix.shardTotal }}
         continue-on-error: true
 
       - name: Upload Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
+          name: test-results-${{ matrix.shardIndex }}
           path: target/surefire-reports/
           if-no-files-found: ignore
 
@@ -47,7 +56,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots
+          name: screenshots-${{ matrix.shardIndex }}
           path: screenshots/
           retention-days: 7
           if-no-files-found: ignore
