@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 import io.qameta.allure.Allure;
 import utils.ScreenshotUtil;
 import utils.LogUtil;
-import java.lang.reflect.Field; // <-- Đã thêm thư viện này
+import java.lang.reflect.Field;
 
 public class TestListener implements ITestListener {
 
@@ -21,32 +21,27 @@ public class TestListener implements ITestListener {
     @Override
     public void onTestSuccess(ITestResult result) {
         LogUtil.info("Test Passed: " + result.getName());
-        Allure.step("Test completed successfully");
-
-        // Chụp ảnh khi Pass
-        captureFinalScreenshot(result, "SUCCESS");
+        // Đã xóa lệnh Allure.step ở đây để ảnh không bị chui vào trong
+        captureFinalScreenshot(result);
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
         LogUtil.error("Test Failed: " + result.getName());
 
-        // Add failure message to report
         Throwable throwable = result.getThrowable();
         if (throwable != null) {
-            Allure.step("Failure Reason: " + throwable.getMessage());
             LogUtil.error("Failure Reason: " + throwable.getMessage());
+            // Đã xóa lệnh Allure.step ở đây để ảnh không bị chui vào trong
         }
 
-        // Chụp ảnh khi Fail (Đoạn code dài dòng cũ đã được xóa bỏ để dùng chung hàm
-        // này)
-        captureFinalScreenshot(result, "FAILED");
+        // Chụp ảnh chốt hạ ở ngoài cùng
+        captureFinalScreenshot(result);
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
         LogUtil.warn("Test Skipped: " + result.getName());
-        Allure.step("Test was skipped");
     }
 
     @Override
@@ -69,7 +64,7 @@ public class TestListener implements ITestListener {
         LogUtil.info("Skipped: " + context.getSkippedTests().size());
     }
 
-    private void captureFinalScreenshot(ITestResult result, String status) {
+    private void captureFinalScreenshot(ITestResult result) {
         Object testObject = result.getInstance();
         WebDriver driver = null;
 
@@ -89,22 +84,20 @@ public class TestListener implements ITestListener {
 
                 if (driverField != null) {
                     driverField.setAccessible(true);
-                    driver = (WebDriver) driverField.get(testObject);
+                    Object driverObj = driverField.get(testObject);
+
+                    // Xử lý an toàn cho cả trường hợp biến driver thường và ThreadLocal (Parallel)
+                    if (driverObj instanceof ThreadLocal) {
+                        driver = (WebDriver) ((ThreadLocal<?>) driverObj).get();
+                    } else {
+                        driver = (WebDriver) driverObj;
+                    }
                 }
             }
 
-            // Nếu tìm thấy driver, ra lệnh cho anh thợ ảnh (ScreenshotUtil)
+            // Nếu tìm thấy driver, gọi hàm đính kèm ảnh root
             if (driver != null) {
-                String testName = result.getName();
-
-                if (status.equals("FAILED")) {
-                    LogUtil.info("Taking final screenshot for FAILED test: " + testName);
-                    ScreenshotUtil.takeScreenshotOnFailure(driver, testName);
-                } else {
-                    String fileName = "FINAL_RESULT_SUCCESS_" + testName;
-                    LogUtil.info("Taking final screenshot for SUCCESS test: " + fileName);
-                    ScreenshotUtil.attachScreenshot(driver, fileName);
-                }
+                ScreenshotUtil.attachRootScreenshot(driver);
             } else {
                 LogUtil.warn("Không tìm thấy WebDriver để chụp ảnh!");
             }

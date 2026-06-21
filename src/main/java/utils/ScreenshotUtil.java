@@ -69,8 +69,15 @@ public class ScreenshotUtil {
         return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
     }
 
-    public static void saveResultScreenshot(WebDriver driver) {
-        // Gọi trực tiếp phương thức attachScreenshot đã có sẵn
-        attachScreenshot(driver, "Kết quả cuối cùng");
+    @Attachment(value = "Kết quả sau khi thực thi", type = "image/png")
+    public static byte[] attachRootScreenshot(WebDriver driver) {
+        try {
+            LogUtil.info("Đã đính kèm ảnh Kết quả sau khi thực thi vào root Allure.");
+            // Allure sẽ tự động lấy byte[] này và tạo thành ảnh PNG trên report
+            return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+        } catch (Exception e) {
+            LogUtil.error("Không thể đính kèm ảnh: " + e.getMessage());
+            return new byte[0]; // Trả về mảng rỗng nếu lỗi để không làm sập chương trình
+        }
     }
 }
