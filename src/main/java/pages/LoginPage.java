@@ -17,7 +17,7 @@ public class LoginPage extends BasePage {
     private By passwordField = By.id("js-login-password");
     private By loginButton = By.xpath("(//a[@class='btn-submit'])[1]");
     private By loginSuccessfully = By
-            .xpath("(//div[@class='account-right']//div[contains(text(), 'Bạn đang ở trang tài khoản')");
+            .xpath("//div[@class='account-right']//div[contains(text(), 'Bạn đang ở trang tài khoản')]");
     private By emailErrorMessage = By.xpath("(//div[contains(text(),'Email đăng nhập không đúng')])[1]");
     private By passwordErrorMessage = By.xpath("(//div[contains(text(),'Mật khẩu không đúng')])[1]");
 
@@ -40,7 +40,6 @@ public class LoginPage extends BasePage {
 
     @Step("Click vào nút Đăng nhập")
     public void clickLogin() {
-        scrollToElement(loginButton);
         jsClick(loginButton);
     }
 
