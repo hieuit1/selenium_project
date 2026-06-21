@@ -37,7 +37,11 @@ public class DriverFactory {
                 break;
         }
 
-        driver.manage().window().maximize();
+        if (ConfigReader.isHeadlessMode()) {
+            driver.manage().window().setSize(new org.openqa.selenium.Dimension(1920, 1080));
+        } else {
+            driver.manage().window().maximize();
+        }
         LogUtil.info("WebDriver initialized successfully");
         WaitUtil.setWait(driver);
         return driver;
@@ -50,9 +54,11 @@ public class DriverFactory {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
 
-        options.addArguments("--headless=new");
+        if (ConfigReader.isHeadlessMode()) {
+            options.addArguments("--headless=new");
+            LogUtil.info("Chrome running in headless mode");
+        }
         options.addArguments("--window-size=1920,1080");
-        options.addArguments("--start-maximized");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
