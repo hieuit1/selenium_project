@@ -37,11 +37,11 @@ public class LoginPage extends BasePage {
 
     @Step("Click vào nút Đăng nhập")
     public void clickLogin() {
-            scrollToElement(loginButton);
-            jsClick(loginButton);
+        scrollToElement(loginButton);
+        jsClick(loginButton);
     }
 
-    @Step("Kiểm tra trạng thái đăng nhập thành công")
+    @Step("Kiểm tra tình trạng đăng nhập có thành công")
     public boolean isLoginSuccessful() {
         boolean isSuccess = isElementDisplayed(loginSuccessfully);
 

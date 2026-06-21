@@ -81,10 +81,9 @@ jobs:
           keep_reports: 20
 
       - name: Clean up old report
-        continue-on-error: true
         run: |
           mkdir -p allure-history
-          rm -rf allure-history/*
+          rm -rf allure-history/* || true
 
       - name: Deploy Allure Report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
