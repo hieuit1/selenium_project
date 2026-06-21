@@ -11,7 +11,7 @@ import utils.ConfigReader;
 import utils.LogUtil;
 
 public class BaseTest {
-
+    protected WebDriver driver;
 
     @BeforeMethod
     public void setup(Method method) throws Exception {
