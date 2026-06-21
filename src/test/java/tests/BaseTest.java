@@ -32,7 +32,6 @@ public class BaseTest {
     public void teardown(ITestResult result) {
         // Chụp ảnh kết quả ở cấp độ root của test case trước khi đóng trình duyệt
         if (DriverFactory.getDriver() != null) {
-            utils.ScreenshotUtil.attachRootScreenshot(DriverFactory.getDriver());
             DriverFactory.quitDriver();
         }
     }

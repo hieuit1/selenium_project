@@ -1,15 +1,18 @@
 package listeners;
 
+import org.testng.IInvokedMethod;
+import org.testng.IInvokedMethodListener;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 import org.openqa.selenium.WebDriver;
 import io.qameta.allure.Allure;
 import utils.ScreenshotUtil;
+import utils.DriverFactory;
 import utils.LogUtil;
 import java.lang.reflect.Field;
 
-public class TestListener implements ITestListener {
+public class TestListener implements ITestListener, IInvokedMethodListener {
 
     @Override
     public void onTestStart(ITestResult result) {
@@ -23,15 +26,36 @@ public class TestListener implements ITestListener {
     @Override
     public void onTestSuccess(ITestResult result) {
         LogUtil.info("Test Passed: " + result.getName());
+        // Chụp ảnh khi Pass -> Ảnh nằm ngang hàng ở cuối cùng
+        ScreenshotUtil.attachRootScreenshot(DriverFactory.getDriver());
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
         LogUtil.error("Test Failed: " + result.getName());
-
         Throwable throwable = result.getThrowable();
         if (throwable != null) {
             LogUtil.error("Failure Reason: " + throwable.getMessage());
+        }
+        // Chụp ảnh khi Fail -> Ảnh nằm ngang hàng ở cuối cùng
+        ScreenshotUtil.attachRootScreenshot(DriverFactory.getDriver());
+    }
+
+    @Override
+    public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
+        // Không cần làm gì trước khi hàm chạy
+    }
+
+    @Override
+    public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
+        // Kiểm tra xem phương thức vừa chạy xong có phải là một hàm @Test hay không
+        // (Để tránh nó chụp ảnh cả ở các hàm @BeforeMethod, @AfterMethod)
+        if (method.isTestMethod()) {
+            if (DriverFactory.getDriver() != null) {
+                // Tự động chụp ảnh. Vì lúc này Allure chưa đóng Test Case,
+                // ảnh sẽ tự động nằm ngang hàng ở cuối cùng của Test Body!
+                ScreenshotUtil.takeScreenshot(DriverFactory.getDriver());
+            }
         }
     }
 

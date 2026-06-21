@@ -28,18 +28,11 @@ public class LoginPage extends BasePage {
         });
     }
 
-    @Step("Nhập email: {username}")
-    public void enterUsername(String username) {
-        type(usernameField, username);
-    }
-
-    @Step("Nhập mật khẩu")
-    public void enterPassword(String password) {
+    @Step("Thực hiện Đăng nhập với tài khoản: {email}")
+    public void login(String email, String password) {
+        LogUtil.info("Performing login with email: " + email);
+        type(usernameField, email);
         type(passwordField, password);
-    }
-
-    @Step("Click vào nút Đăng nhập")
-    public void clickLogin() {
         jsClick(loginButton);
     }
 
@@ -72,11 +65,4 @@ public class LoginPage extends BasePage {
         return isDisplayed;
     }
 
-    @Step("Thực hiện Đăng nhập với tài khoản: {email}")
-    public void login(String email, String password) {
-        LogUtil.info("Performing login with email: " + email);
-        enterUsername(email);
-        enterPassword(password);
-        clickLogin();
-    }
 }

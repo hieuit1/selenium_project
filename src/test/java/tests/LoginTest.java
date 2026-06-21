@@ -1,6 +1,6 @@
 package tests;
 
-import org.testng.Assert; // Thêm import Assert của TestNG
+import org.testng.Assert;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import io.qameta.allure.Description;
@@ -22,9 +22,7 @@ public class LoginTest extends BaseTest {
 
         // Các bước này sẽ tự động được ghi vào Allure nhờ @Step đã gắn bên LoginPage
         loginPage.clickLoginMenu();
-        loginPage.enterUsername("test@gmail.com");
-        loginPage.enterPassword("testweb123");
-        loginPage.clickLogin();
+        loginPage.login("test@gmail.com", "testweb123");
 
         boolean isSuccess = loginPage.isLoginSuccessful();
         // Dùng Assert của TestNG
@@ -39,9 +37,7 @@ public class LoginTest extends BaseTest {
     public void testLoginWithWrongPassword() {
         LoginPage loginPage = new LoginPage(DriverFactory.getDriver());
         loginPage.clickLoginMenu();
-        loginPage.enterUsername("test@gmail.com");
-        loginPage.enterPassword("wrongpass");
-        loginPage.clickLogin();
+        loginPage.login("test@gmail.com", "wrongpass");
 
         Assert.assertFalse(loginPage.isLoginSuccessful(), "NGUY HIỂM: Đăng nhập thành công dù sai mật khẩu!");
     }
@@ -52,9 +48,7 @@ public class LoginTest extends BaseTest {
     public void testLoginWithInvalidEmail() {
         LoginPage loginPage = new LoginPage(DriverFactory.getDriver());
         loginPage.clickLoginMenu();
-        loginPage.enterUsername("invalid@gmail.com");
-        loginPage.enterPassword("testweb123");
-        loginPage.clickLogin();
+        loginPage.login("invalid@gmail.com", "testweb123");
 
         Assert.assertFalse(loginPage.isLoginSuccessful(), "NGUY HIỂM: Đăng nhập thành công dù email không tồn tại!");
     }
@@ -65,9 +59,7 @@ public class LoginTest extends BaseTest {
     public void testLoginWithEmptyFields() {
         LoginPage loginPage = new LoginPage(DriverFactory.getDriver());
         loginPage.clickLoginMenu();
-        loginPage.enterUsername("");
-        loginPage.enterPassword("");
-        loginPage.clickLogin();
+        loginPage.login("", "");
 
         Assert.assertTrue(loginPage.isEmailErrorDisplayed(), "Lỗi email không hiện khi để trống!");
         Assert.assertFalse(loginPage.isLoginSuccessful(), "NGUY HIỂM: Đăng nhập thành công khi để trống!");
@@ -79,9 +71,7 @@ public class LoginTest extends BaseTest {
     public void testLoginWithEmptyEmail() {
         LoginPage loginPage = new LoginPage(DriverFactory.getDriver());
         loginPage.clickLoginMenu();
-        loginPage.enterUsername("");
-        loginPage.enterPassword("password123");
-        loginPage.clickLogin();
+        loginPage.login("", "password123");
 
         Assert.assertTrue(loginPage.isEmailErrorDisplayed(), "Lỗi email không hiện!");
         Assert.assertFalse(loginPage.isLoginSuccessful(), "NGUY HIỂM: Đăng nhập thành công dù trống email!");
@@ -93,9 +83,7 @@ public class LoginTest extends BaseTest {
     public void testLoginWithEmptyPassword() {
         LoginPage loginPage = new LoginPage(DriverFactory.getDriver());
         loginPage.clickLoginMenu();
-        loginPage.enterUsername("test@gmail.com");
-        loginPage.enterPassword("");
-        loginPage.clickLogin();
+        loginPage.login("test@gmail.com", "");
 
         Assert.assertTrue(loginPage.isPasswordErrorDisplayed(), "Lỗi mật khẩu không hiện!");
         Assert.assertFalse(loginPage.isLoginSuccessful(), "NGUY HIỂM: Đăng nhập thành công dù trống mật khẩu!");
@@ -107,9 +95,7 @@ public class LoginTest extends BaseTest {
     public void testLoginWithInvalidEmailFormat() {
         LoginPage loginPage = new LoginPage(DriverFactory.getDriver());
         loginPage.clickLoginMenu();
-        loginPage.enterUsername("invalid-format-email");
-        loginPage.enterPassword("password123");
-        loginPage.clickLogin();
+        loginPage.login("invalid-format-email", "password123");
 
         Assert.assertTrue(loginPage.isEmailErrorDisplayed(), "Lỗi định dạng email không hiển thị!");
         Assert.assertFalse(loginPage.isLoginSuccessful(), "NGUY HIỂM: Đăng nhập thành công với email sai định dạng!");
