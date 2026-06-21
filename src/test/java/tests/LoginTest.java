@@ -24,7 +24,7 @@ public class LoginTest extends BaseTest {
         loginPage.enterUsername("test@gmail.com");
         loginPage.enterPassword("testweb123");
         loginPage.clickLogin();
-        // Kiểm tra kết quả
+
         boolean isSuccess = loginPage.isLoginSuccessful();
         // Dùng Assert của TestNG
         Assert.assertTrue(isSuccess, "Đăng nhập thất bại! Không tìm thấy hộp tài khoản hiển thị.");
@@ -42,7 +42,7 @@ public class LoginTest extends BaseTest {
         loginPage.enterPassword("wrongpass");
         loginPage.clickLogin();
 
-        Assert.assertFalse(loginPage.isStillOnLoginPage(), "NGUY HIỂM: Đăng nhập thành công dù sai mật khẩu!");
+        Assert.assertFalse(loginPage.isLoginSuccessful(), "NGUY HIỂM: Đăng nhập thành công dù sai mật khẩu!");
     }
 
     // TC 3: Verify login fails with non-existent email
@@ -55,7 +55,7 @@ public class LoginTest extends BaseTest {
         loginPage.enterPassword("testweb123");
         loginPage.clickLogin();
 
-        Assert.assertFalse(loginPage.isStillOnLoginPage(), "NGUY HIỂM: Đăng nhập thành công dù email không tồn tại!");
+        Assert.assertFalse(loginPage.isLoginSuccessful(), "NGUY HIỂM: Đăng nhập thành công dù email không tồn tại!");
     }
 
     // TC 4: Verify login fails with empty credentials
@@ -69,7 +69,7 @@ public class LoginTest extends BaseTest {
         loginPage.clickLogin();
 
         Assert.assertTrue(loginPage.isEmailErrorDisplayed(), "Lỗi email không hiện khi để trống!");
-        Assert.assertFalse(loginPage.isStillOnLoginPage(), "NGUY HIỂM: Đăng nhập thành công khi để trống!");
+        Assert.assertFalse(loginPage.isLoginSuccessful(), "NGUY HIỂM: Đăng nhập thành công khi để trống!");
     }
 
     // TC 5: Verify login fails with empty email
@@ -83,7 +83,7 @@ public class LoginTest extends BaseTest {
         loginPage.clickLogin();
 
         Assert.assertTrue(loginPage.isEmailErrorDisplayed(), "Lỗi email không hiện!");
-        Assert.assertFalse(loginPage.isStillOnLoginPage(), "NGUY HIỂM: Đăng nhập thành công dù trống email!");
+        Assert.assertFalse(loginPage.isLoginSuccessful(), "NGUY HIỂM: Đăng nhập thành công dù trống email!");
     }
 
     // TC 6: Verify login fails with empty password
@@ -97,7 +97,7 @@ public class LoginTest extends BaseTest {
         loginPage.clickLogin();
 
         Assert.assertTrue(loginPage.isPasswordErrorDisplayed(), "Lỗi mật khẩu không hiện!");
-        Assert.assertFalse(loginPage.isStillOnLoginPage(), "NGUY HIỂM: Đăng nhập thành công dù trống mật khẩu!");
+        Assert.assertFalse(loginPage.isLoginSuccessful(), "NGUY HIỂM: Đăng nhập thành công dù trống mật khẩu!");
     }
 
     // TC 7: Verify login fails with invalid email format
@@ -111,7 +111,7 @@ public class LoginTest extends BaseTest {
         loginPage.clickLogin();
 
         Assert.assertTrue(loginPage.isEmailErrorDisplayed(), "Lỗi định dạng email không hiển thị!");
-        Assert.assertFalse(loginPage.isStillOnLoginPage(), "NGUY HIỂM: Đăng nhập thành công với email sai định dạng!");
+        Assert.assertFalse(loginPage.isLoginSuccessful(), "NGUY HIỂM: Đăng nhập thành công với email sai định dạng!");
     }
 
 }
