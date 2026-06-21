@@ -53,8 +53,6 @@ public class LoginPage extends BasePage {
         return isSuccess;
     }
 
-    // ==========================================
-
     @Step("Thực hiện Đăng nhập với tài khoản: {email}")
     public void login(String email, String password) {
         LogUtil.info("Performing login with email: " + email);
