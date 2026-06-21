@@ -18,27 +18,23 @@ public class LoginPage extends BasePage {
     private By loginButton = By.xpath("(//a[@class='btn-submit'])[1]");
     private By loginSuccessfully = By.xpath("(//div[@class='box-account background-white d-flex'])[1]");
 
-    // 1. Click menu Tài khoản
-    @Step("Click menu Tài khoản")
     public void clickLoginMenu() {
-        jsClick(clickUserLogin);
+        stepWithScreenshot("Click vào Đăng nhập", () -> {
+            scrollToElement(clickUserLogin);
+            jsClick(clickUserLogin);
+        });
     }
 
-    // 2. Nhập tên đăng nhập
-    @Step("Nhập tên đăng nhập: {username}")
+    @Step("Nhập email: {username}")
     public void enterUsername(String username) {
         type(usernameField, username);
     }
 
-    // 3. Nhập mật khẩu
     @Step("Nhập mật khẩu")
     public void enterPassword(String password) {
-        stepWithScreenshot("Nhập mật khẩu", () -> {
-            type(passwordField, password);
-        });
+        type(passwordField, password);
     }
 
-    // 4. Click nút Đăng nhập
     public void clickLogin() {
         stepWithScreenshot("Click nút Đăng nhập", () -> {
             scrollToElement(loginButton);
@@ -46,10 +42,18 @@ public class LoginPage extends BasePage {
         });
     }
 
-    // 5. Hàm kiểm tra xem đã đăng nhập thành công chưa
+    @Step("Kiểm tra trạng thái đăng nhập thành công")
     public boolean isLoginSuccessful() {
-        return isElementDisplayed(loginSuccessfully);
+        boolean isSuccess = isElementDisplayed(loginSuccessfully);
+
+        if (isSuccess) {
+            takeScreenshot("Đăng nhập thành công");
+        }
+
+        return isSuccess;
     }
+
+    // ==========================================
 
     @Step("Thực hiện Đăng nhập với tài khoản: {email}")
     public void login(String email, String password) {
