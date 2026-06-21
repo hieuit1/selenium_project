@@ -49,6 +49,8 @@ public class LoginPage extends BasePage {
 
         if (isSuccess) {
             takeScreenshot("Đăng nhập thành công");
+        } else {
+            takeScreenshot("Kết quả: Đăng nhập THẤT BẠI");
         }
 
         return isSuccess;
@@ -56,12 +58,20 @@ public class LoginPage extends BasePage {
 
     @Step("Kiểm tra thông báo lỗi email hiển thị")
     public boolean isEmailErrorDisplayed() {
-        return isElementDisplayed(emailErrorMessage);
+        boolean isDisplayed = isElementDisplayed(emailErrorMessage);
+        if (isDisplayed) {
+            takeScreenshot("Thông báo lỗi email đã hiển thị");
+        }
+        return isDisplayed;
     }
 
     @Step("Kiểm tra thông báo lỗi mật khẩu hiển thị")
     public boolean isPasswordErrorDisplayed() {
-        return isElementDisplayed(passwordErrorMessage);
+        boolean isDisplayed = isElementDisplayed(passwordErrorMessage);
+        if (isDisplayed) {
+            takeScreenshot("Thông báo lỗi mật khẩu đã hiển thị");
+        }
+        return isDisplayed;
     }
 
     @Step("Thực hiện Đăng nhập với tài khoản: {email}")

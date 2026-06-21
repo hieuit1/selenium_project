@@ -26,7 +26,6 @@ public class LoginTest extends BaseTest {
         loginPage.clickLogin();
         // Kiểm tra kết quả
         boolean isSuccess = loginPage.isLoginSuccessful();
-        loginPage.takeScreenshot("Kết quả sau khi Đăng Nhập");
         // Dùng Assert của TestNG
         Assert.assertTrue(isSuccess, "Đăng nhập thất bại! Không tìm thấy hộp tài khoản hiển thị.");
     }
