@@ -17,6 +17,8 @@ public class LoginPage extends BasePage {
     private By passwordField = By.id("js-login-password");
     private By loginButton = By.xpath("(//a[@class='btn-submit'])[1]");
     private By loginSuccessfully = By.xpath("(//div[@class='box-account background-white d-flex'])[1]");
+    private By emailErrorMessage = By.xpath("(//div[contains(text(),'Email đăng nhập không đúng')])[1]");
+    private By passwordErrorMessage = By.xpath("(//div[contains(text(),'Mật khẩu không đúng')])[1]");
 
     public void clickLoginMenu() {
         stepWithScreenshot("Click vào Đăng nhập", () -> {
@@ -41,7 +43,7 @@ public class LoginPage extends BasePage {
         jsClick(loginButton);
     }
 
-    @Step("Kiểm tra tình trạng đăng nhập có thành công")
+    @Step("Kiểm tra đăng nhập")
     public boolean isLoginSuccessful() {
         boolean isSuccess = isElementDisplayed(loginSuccessfully);
 
@@ -50,6 +52,16 @@ public class LoginPage extends BasePage {
         }
 
         return isSuccess;
+    }
+
+    @Step("Kiểm tra thông báo lỗi email hiển thị")
+    public boolean isEmailErrorDisplayed() {
+        return isElementDisplayed(emailErrorMessage);
+    }
+
+    @Step("Kiểm tra thông báo lỗi mật khẩu hiển thị")
+    public boolean isPasswordErrorDisplayed() {
+        return isElementDisplayed(passwordErrorMessage);
     }
 
     @Step("Thực hiện Đăng nhập với tài khoản: {email}")

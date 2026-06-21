@@ -8,9 +8,6 @@ import io.qameta.allure.Allure;
 import utils.ScreenshotUtil;
 import utils.LogUtil;
 
-/**
- * Test Listener - captures screenshots on test failure
- */
 public class TestListener implements ITestListener {
 
     /**

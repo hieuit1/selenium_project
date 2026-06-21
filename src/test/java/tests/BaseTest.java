@@ -10,9 +10,6 @@ import utils.DriverFactory;
 import utils.ConfigReader;
 import utils.LogUtil;
 
-/**
- * Base Test class with video recording and driver management
- */
 public class BaseTest {
 
     protected WebDriver driver;
