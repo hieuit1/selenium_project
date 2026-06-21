@@ -1,0 +1,8 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","12799","Verify login fails with empty password","Selenium Automation Test Suite","2026-06-21","passed","2026-06-21","tests.LoginTest","Login Tests","tests.LoginTest","testLoginWithEmptyPassword"
+"","12200","Verify login fails with invalid email format","Selenium Automation Test Suite","2026-06-21","passed","2026-06-21","tests.LoginTest","Login Tests","tests.LoginTest","testLoginWithInvalidEmailFormat"
+"","12702","Verify login fails with empty credentials","Selenium Automation Test Suite","2026-06-21","passed","2026-06-21","tests.LoginTest","Login Tests","tests.LoginTest","testLoginWithEmptyFields"
+"","11617","Verify login fails with wrong password","Selenium Automation Test Suite","2026-06-21","passed","2026-06-21","tests.LoginTest","Login Tests","tests.LoginTest","testLoginWithWrongPassword"
+"","12491","Verify login fails with empty email","Selenium Automation Test Suite","2026-06-21","passed","2026-06-21","tests.LoginTest","Login Tests","tests.LoginTest","testLoginWithEmptyEmail"
+"This test verifies that a user can successfully log in using valid email and password","3805","Verify user can login with valid credentials","Selenium Automation Test Suite","2026-06-21","passed","2026-06-21","tests.LoginTest","Login Tests","tests.LoginTest","testLoginSuccessfully"
+"","12136","Verify login fails with non-existent email","Selenium Automation Test Suite","2026-06-21","passed","2026-06-21","tests.LoginTest","Login Tests","tests.LoginTest","testLoginWithInvalidEmail"
