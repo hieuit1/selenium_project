@@ -48,17 +48,10 @@ public class LoginPage extends BasePage {
         boolean isSuccess = isElementDisplayed(loginSuccessfully);
         if (isSuccess) {
             takeScreenshot("Đăng nhập thành công");
+        } else {
+            takeScreenshot("Đăng nhập thất bại");
         }
         return isSuccess;
-    }
-
-    @Step("Kiểm tra vẫn đang ở trang đăng nhập")
-    public boolean isStillOnLoginPage() {
-        boolean isStillOnLogin = isElementDisplayed(usernameField) && isElementDisplayed(passwordField);
-        if (isStillOnLogin) {
-            takeScreenshot("Vẫn đang ở trang đăng nhập");
-        }
-        return isStillOnLogin;
     }
 
     @Step("Kiểm tra thông báo lỗi email hiển thị")
