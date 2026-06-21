@@ -80,8 +80,10 @@ jobs:
           gh_pages: gh-pages-dir
           keep_reports: 20
 
-      - name: clean up old report
+      - name: Clean up old report
+        continue-on-error: true
         run: |
+          mkdir -p allure-history
           rm -rf allure-history/*
 
       - name: Deploy Allure Report to GitHub Pages
