@@ -23,8 +23,6 @@ public class TestListener implements ITestListener {
     @Override
     public void onTestSuccess(ITestResult result) {
         LogUtil.info("Test Passed: " + result.getName());
-        // Đã xóa lệnh Allure.step ở đây để ảnh không bị chui vào trong
-        captureFinalScreenshot(result);
     }
 
     @Override
@@ -34,11 +32,7 @@ public class TestListener implements ITestListener {
         Throwable throwable = result.getThrowable();
         if (throwable != null) {
             LogUtil.error("Failure Reason: " + throwable.getMessage());
-            // Đã xóa lệnh Allure.step ở đây để ảnh không bị chui vào trong
         }
-
-        // Chụp ảnh chốt hạ ở ngoài cùng
-        captureFinalScreenshot(result);
     }
 
     @Override
@@ -66,47 +60,5 @@ public class TestListener implements ITestListener {
         LogUtil.info("Passed: " + context.getPassedTests().size());
         LogUtil.info("Failed: " + context.getFailedTests().size());
         LogUtil.info("Skipped: " + context.getSkippedTests().size());
-    }
-
-    private void captureFinalScreenshot(ITestResult result) {
-        Object testObject = result.getInstance();
-        WebDriver driver = null;
-
-        try {
-            if (testObject != null) {
-                Class<?> clazz = testObject.getClass();
-                Field driverField = null;
-
-                // TÌM KIẾM THÔNG MINH: Quét từ class hiện tại lùi về class cha
-                while (clazz != null && driverField == null) {
-                    try {
-                        driverField = clazz.getDeclaredField("driver");
-                    } catch (NoSuchFieldException e) {
-                        clazz = clazz.getSuperclass();
-                    }
-                }
-
-                if (driverField != null) {
-                    driverField.setAccessible(true);
-                    Object driverObj = driverField.get(testObject);
-
-                    // Xử lý an toàn cho cả trường hợp biến driver thường và ThreadLocal (Parallel)
-                    if (driverObj instanceof ThreadLocal) {
-                        driver = (WebDriver) ((ThreadLocal<?>) driverObj).get();
-                    } else {
-                        driver = (WebDriver) driverObj;
-                    }
-                }
-            }
-
-            // Nếu tìm thấy driver, gọi hàm đính kèm ảnh root
-            if (driver != null) {
-                ScreenshotUtil.attachRootScreenshot(driver);
-            } else {
-                LogUtil.warn("Không tìm thấy WebDriver để chụp ảnh!");
-            }
-        } catch (Exception e) {
-            LogUtil.warn("Lỗi trong quá trình chụp ảnh tự động: " + e.getMessage());
-        }
     }
 }

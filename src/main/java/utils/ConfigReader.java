@@ -27,6 +27,11 @@ public class ConfigReader {
      * Get property value
      */
     public static String getProperty(String key) {
+        String sysProp = System.getProperty(key);
+        if (sysProp != null) {
+            return sysProp;
+        }
+
         String value = properties.getProperty(key);
         if (value == null) {
             LogUtil.warn("Property not found: " + key);
@@ -38,6 +43,12 @@ public class ConfigReader {
      * Get property with default value
      */
     public static String getProperty(String key, String defaultValue) {
+        String sysProp = System.getProperty(key);
+        if (sysProp != null) {
+            LogUtil.debug("System Property [" + key + "] = " + sysProp);
+            return sysProp;
+        }
+
         String value = properties.getProperty(key, defaultValue);
         LogUtil.debug("Property [" + key + "] = " + value);
         return value;

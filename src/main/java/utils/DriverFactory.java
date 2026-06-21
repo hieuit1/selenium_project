@@ -15,7 +15,7 @@ import io.qameta.allure.Step;
  */
 public class DriverFactory {
 
-    private static WebDriver driver;
+    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
     /**
      * Initialize WebDriver based on browser type
@@ -23,26 +23,29 @@ public class DriverFactory {
     @Step("Initialize WebDriver - Browser: {browser}")
     public static WebDriver initializeDriver(String browser) {
         LogUtil.info("Initializing WebDriver for browser: " + browser);
+        WebDriver webDriver;
 
         switch (browser.toLowerCase()) {
             case "firefox":
-                driver = createFirefoxDriver();
+                webDriver = createFirefoxDriver();
                 break;
             case "edge":
-                driver = createEdgeDriver();
+                webDriver = createEdgeDriver();
                 break;
             case "chrome":
             default:
-                driver = createChromeDriver();
+                webDriver = createChromeDriver();
                 break;
         }
 
+        driver.set(webDriver);
+
         if (!ConfigReader.isHeadlessMode()) {
-            driver.manage().window().maximize();
+            getDriver().manage().window().maximize();
         }
         LogUtil.info("WebDriver initialized successfully");
-        WaitUtil.setWait(driver);
-        return driver;
+        WaitUtil.setWait(getDriver());
+        return getDriver();
     }
 
     /**
@@ -103,10 +106,10 @@ public class DriverFactory {
      * Get driver instance
      */
     public static WebDriver getDriver() {
-        if (driver == null) {
-            driver = initializeDriver(ConfigReader.getBrowser());
+        if (driver.get() == null) {
+            initializeDriver(ConfigReader.getBrowser());
         }
-        return driver;
+        return driver.get();
     }
 
     /**
@@ -114,10 +117,10 @@ public class DriverFactory {
      */
     @Step("Close WebDriver")
     public static void quitDriver() {
-        if (driver != null) {
+        if (driver.get() != null) {
             LogUtil.info("Closing WebDriver");
-            driver.quit();
-            driver = null;
+            driver.get().quit();
+            driver.remove();
         }
     }
 
@@ -127,6 +130,6 @@ public class DriverFactory {
     @Step("Navigate to URL: {url}")
     public static void navigateTo(String url) {
         LogUtil.info("Navigating to: " + url);
-        driver.get(url);
+        getDriver().get(url);
     }
 }

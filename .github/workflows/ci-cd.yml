@@ -40,7 +40,8 @@ jobs:
         run: |
           mvn clean test -Dsurefire.failIfNoSpecifiedTests=false \
           -DshardIndex=${{ matrix.shardIndex }} \
-          -DshardTotal=${{ matrix.shardTotal }}
+          -DshardTotal=${{ matrix.shardTotal }} \
+          -Dheadless.mode=true
         continue-on-error: true
 
       # Upload kết quả để Job 'report' tải về

@@ -12,7 +12,6 @@ import utils.LogUtil;
 
 public class BaseTest {
 
-    protected WebDriver driver;
 
     @BeforeMethod
     public void setup(Method method) throws Exception {
@@ -21,7 +20,7 @@ public class BaseTest {
         // Initialize WebDriver
         String browser = ConfigReader.getBrowser();
         LogUtil.info("Initializing WebDriver with browser: " + browser);
-        driver = DriverFactory.initializeDriver(browser);
+        DriverFactory.initializeDriver(browser);
 
         // Navigate to base URL
         String baseUrl = ConfigReader.getBaseUrl();
@@ -31,8 +30,9 @@ public class BaseTest {
 
     @AfterMethod
     public void teardown(ITestResult result) {
-        // Chỉ đóng driver sau khi hoàn tất test
-        if (driver != null) {
+        // Chụp ảnh kết quả ở cấp độ root của test case trước khi đóng trình duyệt
+        if (DriverFactory.getDriver() != null) {
+            utils.ScreenshotUtil.attachRootScreenshot(DriverFactory.getDriver());
             DriverFactory.quitDriver();
         }
     }
