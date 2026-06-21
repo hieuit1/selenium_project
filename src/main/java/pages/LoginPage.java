@@ -35,11 +35,10 @@ public class LoginPage extends BasePage {
         type(passwordField, password);
     }
 
+    @Step("Click vào nút Đăng nhập")
     public void clickLogin() {
-        stepWithScreenshot("Click nút Đăng nhập", () -> {
             scrollToElement(loginButton);
             jsClick(loginButton);
-        });
     }
 
     @Step("Kiểm tra trạng thái đăng nhập thành công")
