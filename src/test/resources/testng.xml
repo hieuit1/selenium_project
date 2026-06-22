@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-current.dtd">
 
-<suite name="Selenium Automation Test Suite" parallel="classes" thread-count="1">
+<suite name="Selenium Automation Test Suite" parallel="classes" thread-count="2">
     <test name="Login Tests">
         <classes>
             <class name="tests.LoginTest"></class>
+        </classes>
+    </test>
+
+    <test name="Register Tests">
+        <classes>
+            <class name="tests.RegisterTest"></class>
         </classes>
     </test>
 </suite>
