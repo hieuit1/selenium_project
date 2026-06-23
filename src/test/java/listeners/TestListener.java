@@ -5,12 +5,10 @@ import org.testng.IInvokedMethodListener;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-import org.openqa.selenium.WebDriver;
 import io.qameta.allure.Allure;
 import utils.ScreenshotUtil;
 import utils.DriverFactory;
 import utils.LogUtil;
-import java.lang.reflect.Field;
 
 public class TestListener implements ITestListener, IInvokedMethodListener {
 
