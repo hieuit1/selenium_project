@@ -1,25 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-current.dtd">
-
-<suite name="Selenium Automation Test Suite" parallel="tests" thread-count="4">
-<listeners>
+<suite name="Selenium Automation Test Suite" parallel="methods" thread-count="4">
+    <listeners>
         <listener class-name="listeners.ShardListener" />
         <listener class-name="listeners.TestListener" />
     </listeners>
-    <test name="Login Tests">
+    
+    <test name="All Tests">
         <classes>
-            <class name="tests.LoginTest"></class>
-        </classes>
-    </test>
-
-    <test name="Register Tests">
-        <classes>
-            <class name="tests.RegisterTest"></class>
-        </classes>
-    </test>
-    <test name="Search Tests">
-        <classes>
-            <class name="tests.SearchTest"></class>
+            <class name="tests.LoginTest" />
+            <class name="tests.RegisterTest" />
+            <class name="tests.SearchTest" />
         </classes>
     </test>
 </suite>
