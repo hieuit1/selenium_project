@@ -17,12 +17,13 @@ permissions:
 jobs:
   # Job 1: Chạy test song song trên 3 máy ảo (Sharding)
   test:
+    name : Run Tests on Shard ${{ matrix.shardIndex }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        shardIndex: [1,2 ]
-        shardTotal: [2]
+        shardIndex: [1,2,3,4 ]
+        shardTotal: [4]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

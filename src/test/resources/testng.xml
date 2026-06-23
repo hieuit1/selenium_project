@@ -2,6 +2,10 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-current.dtd">
 
 <suite name="Selenium Automation Test Suite" parallel="tests" thread-count="2">
+<listeners>
+        <listener class-name="listeners.ShardListener" />
+        <listener class-name="listeners.TestListener" />
+    </listeners>
     <test name="Login Tests">
         <classes>
             <class name="tests.LoginTest"></class>

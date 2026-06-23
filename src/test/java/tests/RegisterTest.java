@@ -70,6 +70,9 @@ public class RegisterTest extends BaseTest {
             Assert.assertTrue(registerPage.isPasswordErrorDisplayed(), "Thiếu lỗi Mật khẩu");
         } else if (data.expectedErrorField.equals("email_exists")) {
             Assert.assertTrue(registerPage.isEmailExistsErrorDisplayed(), "Thiếu thông báo lỗi Email đã tồn tại");
+        } else if (data.expectedErrorField.equals("password_short")) {
+            Assert.assertTrue(registerPage.isPasswordShortErrorDisplayed(),
+                    "Thiếu thông báo lỗi Mật khẩu có tối thiểu 6 ký tự");
         } else {
             boolean isSuccess = registerPage.isRegisterSuccessful();
             Assert.assertFalse(isSuccess, "Lỗi: Tài khoản không hợp lệ nhưng vẫn tạo thành công!");

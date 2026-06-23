@@ -24,6 +24,7 @@ public class RegisterPage extends BasePage {
     private By nameErrorMessage = By.xpath("(//div[contains(text(),'Tên quá ngắn')])[1]");
     private By emailErrorMessage = By.xpath("(//div[contains(text(),'Email không hợp lệ')])[1]");
     private By passwordErrorMessage = By.xpath("(//div[contains(text(),'Mật khẩu không hợp lệ')])[1]");
+    private By passwordShortErrorMessage = By.xpath("(//div[contains(text(),'Mật khẩu có tối thiểu 6 ký tự')])[1]");
     private By emailExistsErrorMessage = By.xpath("(//div[@id='js-popup-register-note'])[1]");
 
     // ================= ACTIONS =================
@@ -95,6 +96,14 @@ public class RegisterPage extends BasePage {
         boolean isDisplayed = isElementDisplayed(passwordErrorMessage);
         if (isDisplayed)
             takeScreenshot("Lỗi mật khẩu hiển thị");
+        return isDisplayed;
+    }
+
+    @Step("Kiểm tra thông báo lỗi Mật khẩu có tối thiểu 6 ký tự hiển thị")
+    public boolean isPasswordShortErrorDisplayed() {
+        boolean isDisplayed = isElementDisplayed(passwordShortErrorMessage);
+        if (isDisplayed)
+            takeScreenshot("Lỗi mật khẩu có tối thiểu 6 ký tự hiển thị");
         return isDisplayed;
     }
 }
