@@ -1,7 +1,6 @@
 package dataproviders;
 
 import org.testng.annotations.DataProvider;
-
 import data.RegisterData;
 
 public class RegisterDataProvider {

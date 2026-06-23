@@ -1,4 +1,4 @@
-package dataproviders;
+package data;
 
 public class SearchData {
 

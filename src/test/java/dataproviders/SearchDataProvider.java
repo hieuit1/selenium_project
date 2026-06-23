@@ -1,6 +1,7 @@
 package dataproviders;
 
 import org.testng.annotations.DataProvider;
+import data.SearchData;
 
 public class SearchDataProvider {
 
