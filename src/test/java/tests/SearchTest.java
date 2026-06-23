@@ -1,14 +1,16 @@
 package tests;
 
-import dataproviders.SearchData;
 import dataproviders.SearchDataProvider;
 import io.qameta.allure.Allure; // Bắt buộc import thư viện Allure
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+
+import data.SearchData;
 import pages.SearchPage;
 import listeners.TestListener;
+import utils.DriverFactory;
 import utils.LogUtil;
 
 @Listeners(TestListener.class)
@@ -18,7 +20,8 @@ public class SearchTest extends BaseTest {
 
     @BeforeMethod
     public void setUpPage() {
-        searchPage = new SearchPage(driver);
+
+        searchPage = new SearchPage(DriverFactory.getDriver());
     }
 
     @Test(dataProvider = "positiveSearchData", dataProviderClass = SearchDataProvider.class)

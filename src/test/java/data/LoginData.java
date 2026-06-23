@@ -1,14 +1,12 @@
-package dataproviders;
+package data;
 
-public class RegisterData {
-    public String name;
+public class LoginData {
     public String email;
     public String password;
     public String expectedErrorField;
     public String testDescription;
 
-    public RegisterData(String name, String email, String password, String expectedErrorField, String testDescription) {
-        this.name = name;
+    public LoginData(String email, String password, String expectedErrorField, String testDescription) {
         this.email = email;
         this.password = password;
         this.expectedErrorField = expectedErrorField;

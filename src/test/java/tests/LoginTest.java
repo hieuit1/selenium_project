@@ -5,7 +5,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import dataproviders.LoginData;
+import data.LoginData;
 import dataproviders.LoginDataProvider;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;

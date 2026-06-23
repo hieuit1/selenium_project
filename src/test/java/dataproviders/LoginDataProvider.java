@@ -2,6 +2,8 @@ package dataproviders;
 
 import org.testng.annotations.DataProvider;
 
+import data.LoginData;
+
 public class LoginDataProvider {
 
     @DataProvider(name = "invalidLoginData")
