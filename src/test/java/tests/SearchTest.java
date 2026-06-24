@@ -2,6 +2,9 @@ package tests;
 
 import dataproviders.SearchDataProvider;
 import io.qameta.allure.Allure; // Bắt buộc import thư viện Allure
+import io.qameta.allure.Description;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -24,7 +27,9 @@ public class SearchTest extends BaseTest {
         searchPage = new SearchPage(DriverFactory.getDriver());
     }
 
-    @Test(dataProvider = "positiveSearchData", dataProviderClass = SearchDataProvider.class)
+    @Test(dataProvider = "positiveSearchData", dataProviderClass = SearchDataProvider.class, groups = {"smoke", "regression", "positive", "priority:medium"})
+    @Description("Verify that search returns matching results for valid search keywords")
+    @Severity(SeverityLevel.NORMAL)
     public void testPositiveSearch(SearchData data) {
 
         Allure.getLifecycle().updateTestCase(t -> t.setName("Positive Search: " + data.testDescription));
@@ -37,7 +42,9 @@ public class SearchTest extends BaseTest {
         Assert.assertTrue(isDisplayed, "Lỗi: Không hiển thị kết quả tìm kiếm cho từ khóa hợp lệ: " + data.keyword);
     }
 
-    @Test(dataProvider = "negativeSearchData", dataProviderClass = SearchDataProvider.class)
+    @Test(dataProvider = "negativeSearchData", dataProviderClass = SearchDataProvider.class, groups = {"regression", "negative", "priority:low"})
+    @Description("Verify that searching with invalid keywords displays the correct no-results message")
+    @Severity(SeverityLevel.MINOR)
     public void testNegativeSearch(SearchData data) {
 
         Allure.getLifecycle().updateTestCase(t -> t.setName("Negative Search: " + data.testDescription));

@@ -8,6 +8,9 @@ import org.testng.annotations.Test;
 import data.RegisterData;
 import dataproviders.RegisterDataProvider;
 import io.qameta.allure.Allure;
+import io.qameta.allure.Description;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
 import listeners.TestListener;
 import pages.RegisterPage;
 import utils.DriverFactory;
@@ -24,31 +27,27 @@ public class RegisterTest extends BaseTest {
     }
 
     // ================= POSITIVE TEST CASE =================
-    // @Test(description = "Verify user can register with valid credentials")
-    // @Description("This test verifies that a user can successfully create a new
-    // account")
-    // @Severity(SeverityLevel.CRITICAL)
-    // public void testRegisterSuccessfully() {
+    @Test(description = "Verify user can register with valid credentials", groups = {"smoke", "regression", "positive", "priority:critical"})
+    @Description("This test verifies that a user can successfully create a new account")
+    @Severity(SeverityLevel.CRITICAL)
+    public void testRegisterSuccessfully() {
+        registerPage.clickLoginMenu();
+        registerPage.clickCreateAccountTab();
 
-    // registerPage.clickLoginMenu();
-    // registerPage.clickCreateAccountTab();
+        // Random email to prevent duplicate email issues in repeated runs
+        long timestamp = System.currentTimeMillis();
+        String randomEmail = "testuser" + timestamp + "@gmail.com";
 
-    // // Lưu ý: Test Positive bạn nên random email để chạy automation nhiều lần
-    // không
-    // // bị trùng
-    // long timestamp = System.currentTimeMillis();
-    // String randomEmail = "testuser" + timestamp + "@gmail.com";
+        registerPage.register("Nguyễn Văn Automation", randomEmail, "Password123!");
 
-    // registerPage.register("Nguyễn Văn Automation", randomEmail, "Password123!");
-
-    // boolean isSuccess = registerPage.isRegisterSuccessful();
-    // Assert.assertTrue(isSuccess,
-    // "Đăng ký thất bại! Không chuyển hướng thành công hoặc không thấy trạng thái
-    // đăng nhập.");
-    // }
+        boolean isSuccess = registerPage.isRegisterSuccessful();
+        Assert.assertTrue(isSuccess, "Đăng ký thất bại! Không chuyển hướng thành công hoặc không thấy trạng thái đăng nhập.");
+    }
 
     // ================= NEGATIVE TEST CASE (DATA-DRIVEN) =================
-    @Test(dataProvider = "invalidRegisterData", dataProviderClass = RegisterDataProvider.class)
+    @Test(dataProvider = "invalidRegisterData", dataProviderClass = RegisterDataProvider.class, groups = {"regression", "negative", "priority:medium"})
+    @Description("Verify register page displays correct validation errors for invalid input values")
+    @Severity(SeverityLevel.NORMAL)
     public void testRegisterDynamic(RegisterData data) {
         Allure.getLifecycle().updateTestCase(t -> t.setName("Register should fail: " + data.testDescription));
 

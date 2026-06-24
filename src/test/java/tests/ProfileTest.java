@@ -8,6 +8,9 @@ import org.testng.annotations.Test;
 import data.ProfileData;
 import dataproviders.ProfileDataProvider;
 import io.qameta.allure.Allure;
+import io.qameta.allure.Description;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
 import listeners.TestListener;
 import pages.LoginPage;
 import pages.ProfilePage;
@@ -28,7 +31,9 @@ public class ProfileTest extends BaseTest {
         Assert.assertTrue(loginPage.isLoginSuccessful(), "Login failed before test!");
     }
 
-    @Test(dataProvider = "validProfileData", dataProviderClass = ProfileDataProvider.class)
+    @Test(dataProvider = "validProfileData", dataProviderClass = ProfileDataProvider.class, groups = {"regression", "positive", "priority:medium"})
+    @Description("This test verifies that a user can successfully update their profile details")
+    @Severity(SeverityLevel.NORMAL)
     public void testUpdateProfile(ProfileData profileData) {
 
         Allure.getLifecycle().updateTestCase(t -> t.setName("Test update profile: " + profileData.testDescription));

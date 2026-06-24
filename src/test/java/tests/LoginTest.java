@@ -28,9 +28,9 @@ public class LoginTest extends BaseTest {
     }
 
     // Test case 1: Verify user can login with valid credentials
-    @Test(description = "Verify user can login with valid credentials")
+    @Test(description = "Verify user can login with valid credentials", groups = {"smoke", "regression", "positive", "priority:critical"})
     @Description("This test verifies that a user can successfully log in using valid email and password")
-    @Severity(SeverityLevel.CRITICAL)
+    @Severity(SeverityLevel.BLOCKER)
     public void testLoginSuccessfully() {
         LoginPage loginPage = new LoginPage(DriverFactory.getDriver());
 
@@ -45,7 +45,9 @@ public class LoginTest extends BaseTest {
 
     // =========data-drive nagetive test case===========
 
-    @Test(dataProvider = "invalidLoginData", dataProviderClass = LoginDataProvider.class)
+    @Test(dataProvider = "invalidLoginData", dataProviderClass = LoginDataProvider.class, groups = {"regression", "negative", "priority:high"})
+    @Description("Verify login page displays correct validation errors for invalid credentials")
+    @Severity(SeverityLevel.CRITICAL)
     public void testLoginDynamic(LoginData data) {
         Allure.getLifecycle().updateTestCase(t -> t.setName("Login should fail: " + data.testDescription));
 
