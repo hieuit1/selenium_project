@@ -10,6 +10,7 @@
             <class name="tests.RegisterTest" />
             <class name="tests.SearchTest" />
             <class name="tests.ProfileTest" />
+            <class name="tests.ReviewTest" />
         </classes>
     </test>
 </suite>
