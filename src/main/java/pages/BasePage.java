@@ -9,7 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.Select;
-import io.qameta.allure.Allure; 
+import io.qameta.allure.Allure;
 import utils.LogUtil;
 import utils.ScreenshotUtil;
 import java.io.ByteArrayInputStream;
@@ -107,6 +107,15 @@ public class BasePage {
         WebElement element = waitForElement(locator);
         element.clear();
         element.sendKeys(text);
+    }
+
+    /**
+     * Select dropdown by visible text
+     */
+    public void selectByVisibleText(By locator, String text) {
+        LogUtil.info("Selecting text '" + text + "' from dropdown: " + locator);
+        Select select = new Select(wait.until(ExpectedConditions.visibilityOfElementLocated(locator)));
+        select.selectByVisibleText(text);
     }
 
     /**

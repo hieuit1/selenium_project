@@ -8,15 +8,12 @@ public class RegisterDataProvider {
         @DataProvider(name = "invalidRegisterData")
         public static Object[][] getInvalidRegisterData() {
                 return new Object[][] {
-                                // 1. Tên quá ngắn (Ví dụ: 1 ký tự)
                                 { new RegisterData("Nguyễn Văn A", "testweb@gmail.com", "Password123!", "email_exists",
                                                 "Đăng ký với email đã tồn tại") },
                                 { new RegisterData("A", "testweb1@gmail.com", "Password123!", "name",
                                                 "Tên quá ngắn (1 ký tự)") },
                                 { new RegisterData("Nguyễn Văn A", "testweb123@gmail.com", "123", "password_short",
                                                 "Mật khẩu dưới 6 ký tự") },
-                                // { new RegisterData("Nguyễn Văn A", "testweb12@gmail.com", " ", "password",
-                                // "Mật khẩu toàn dấu cách") },
                                 { new RegisterData("Nguyễn Văn A", "testweb123gmail.com", "Password123!", "email",
                                                 "Email thiếu còng (@)") },
                                 { new RegisterData("Nguyễn Văn A", "test123@", "Password123!", "email",

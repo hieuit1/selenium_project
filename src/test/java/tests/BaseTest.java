@@ -30,15 +30,11 @@ public class BaseTest {
 
     @AfterMethod
     public void teardown(ITestResult result) {
-        // Chụp ảnh kết quả ở cấp độ root của test case trước khi đóng trình duyệt
         if (DriverFactory.getDriver() != null) {
             DriverFactory.quitDriver();
         }
     }
 
-    /**
-     * Add description to Allure report
-     */
     public void addInfoToReport(String info) {
         LogUtil.info(info);
         Allure.addDescription(info);
