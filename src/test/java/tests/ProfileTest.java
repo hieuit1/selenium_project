@@ -43,6 +43,8 @@ public class ProfileTest extends BaseTest {
                 profileData.wardValue,
                 profileData.address);
 
-        Assert.assertTrue(profilePage.verifyUpdateSuccess(), "Update profile failed");
+        Assert.assertTrue(profilePage.verifyUpdateSuccess(
+                profileData.fullName,
+                profileData.address), "Update profile failed");
     }
 }

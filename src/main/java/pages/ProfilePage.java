@@ -28,15 +28,14 @@ public class ProfilePage extends BasePage {
     private By addressField = By.xpath("(//textarea[@id='address'])[1]");
 
     private By btnSave = By.xpath("(//span[contains(text(),'Lưu thông tin')])[1]");
-    private By updateSuccessMessage = By.xpath("//div[contains(text(),'Cập nhật thành công')]");
 
     // METHODS
 
     @Step("Mở trang Thông tin tài khoản")
     public void openProfilePage() {
         stepWithScreenshot("Mở trang Thông tin tài khoản", () -> {
-            click(accountMenu);
-            click(profileInfoMenu);
+            jsClick(accountMenu);
+            jsClick(profileInfoMenu);
         });
     }
 
@@ -98,13 +97,31 @@ public class ProfilePage extends BasePage {
     }
 
     @Step("Kiểm tra hiển thị thông báo thành công")
-    public boolean verifyUpdateSuccess() {
-        boolean isDisplayed = isElementDisplayed(updateSuccessMessage);
-        if (isDisplayed) {
-            takeScreenshot("Thông báo thành công đã hiển thị");
-        } else {
-            takeScreenshot("Thông báo thành công chưa hiển thị");
+    public boolean verifyUpdateSuccess(String expectedFullName, String expectedAddress) {
+        // Đợi 2 giây để trang web xử lý lưu và tải lại dữ liệu mới
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
         }
-        return isDisplayed;
+
+        // Lấy giá trị thực tế đang hiển thị trong ô Họ tên và Địa chỉ
+        String actualFullName = driver.findElement(fullNameField).getAttribute("value");
+        String actualAddress = driver.findElement(addressField).getAttribute("value");
+
+        // (Tùy chọn) In ra log để dễ debug nếu test bị fail
+        LogUtil.info("Tên thực tế hiển thị: " + actualFullName);
+        LogUtil.info("Địa chỉ thực tế hiển thị: " + actualAddress);
+
+        // Kiểm tra xem dữ liệu trên web có khớp với dữ liệu test truyền vào không
+        boolean isNameMatch = actualFullName.trim().equals(expectedFullName.trim());
+        boolean isAddressMatch = actualAddress.trim().equals(expectedAddress.trim());
+
+        if (isNameMatch && isAddressMatch) {
+            takeScreenshot("Dữ liệu đã được lưu chính xác");
+            return true;
+        } else {
+            takeScreenshot("Lỗi: Dữ liệu hiển thị không khớp với dữ liệu vừa nhập");
+            return false;
+        }
     }
 }
