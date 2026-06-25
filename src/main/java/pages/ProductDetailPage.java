@@ -23,17 +23,24 @@ public class ProductDetailPage extends BasePage {
     private By txtName = By.id("name0");
     private By txtPhone = By.id("phone0");
     private By btnSubmitReview = By.cssSelector("#show-form a.btn-submit");
-    private By btnCloseReview = By.cssSelector("#show-form .close-review");
 
-    private By contentError = By.xpath("//textarea[@id='content0']/following-sibling::div[contains(@class,'note-error')]");
+    private By contentError = By
+            .xpath("//textarea[@id='content0']/following-sibling::div[contains(@class,'note-error')]");
     private By nameError = By.xpath("//input[@id='name0']/following-sibling::div[contains(@class,'note-error')]");
     private By phoneError = By.xpath("//input[@id='phone0']/following-sibling::div[contains(@class,'note-error')]");
 
     // ================= ACTIONS =================
     @Step("Cuộn xuống và click nút Viết đánh giá")
     public void openReviewModal() {
+        waitForElement(btnWriteReview);
         scrollToElement(btnWriteReview);
-        jsClick(btnWriteReview);
+        try {
+            waitForClickable(btnWriteReview);
+            click(btnWriteReview);
+        } catch (Exception e) {
+            LogUtil.warn("Normal click on btnWriteReview failed, using JS click: " + e.getMessage());
+            jsClick(btnWriteReview);
+        }
     }
 
     @Step("Kiểm tra Modal đánh giá hiển thị")
@@ -48,7 +55,7 @@ public class ProductDetailPage extends BasePage {
         } else if (stars == 4) {
             jsClick(star4Rating);
         } // Thêm các sao khác nếu cần thiết
-        
+
         type(txtContent, content);
         type(txtName, name);
         type(txtPhone, phone);
@@ -59,10 +66,10 @@ public class ProductDetailPage extends BasePage {
         click(btnSubmitReview);
     }
 
-    @Step("Đóng modal đánh giá")
-    public void closeReviewModal() {
-        jsClick(btnCloseReview);
-    }
+    // @Step("Đóng modal đánh giá")
+    // public void closeReviewModal() {
+    // jsClick(btnCloseReview);
+    // }
 
     @Step("Lấy thông báo lỗi của trường Nội dung")
     public String getContentErrorText() {
@@ -94,4 +101,3 @@ public class ProductDetailPage extends BasePage {
         }
     }
 }
-

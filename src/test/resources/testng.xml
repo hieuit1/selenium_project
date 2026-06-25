@@ -11,6 +11,7 @@
             <class name="tests.SearchTest" />
             <class name="tests.ProfileTest" />
             <class name="tests.ReviewTest" />
+            <class name="tests.CartTest" />
         </classes>
     </test>
 </suite>

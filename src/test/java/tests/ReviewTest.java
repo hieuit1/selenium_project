@@ -27,11 +27,8 @@ public class ReviewTest extends BaseTest {
         productPage = new ProductDetailPage(DriverFactory.getDriver());
     }
 
-    @Test(
-        dataProvider = "positiveReviewData", 
-        dataProviderClass = ReviewDataProvider.class, 
-        groups = {"smoke", "regression", "positive", "priority:high"}
-    )
+    @Test(dataProvider = "positiveReviewData", dataProviderClass = ReviewDataProvider.class, groups = { "smoke",
+            "regression", "positive", "priority:high" })
     @Description("Kiểm thử luồng tích cực (Positive): Gửi đánh giá sản phẩm thành công với thông tin hợp lệ")
     @Severity(SeverityLevel.CRITICAL)
     public void testSendReviewSuccessfully(ReviewData reviewData) {
@@ -48,11 +45,8 @@ public class ReviewTest extends BaseTest {
         Assert.assertEquals(alertText, reviewData.expectedErrorMessage, "Thông điệp Alert thành công không khớp!");
     }
 
-    @Test(
-        dataProvider = "negativeReviewData", 
-        dataProviderClass = ReviewDataProvider.class, 
-        groups = {"regression", "negative", "priority:medium"}
-    )
+    @Test(dataProvider = "negativeReviewData", dataProviderClass = ReviewDataProvider.class, groups = { "regression",
+            "negative", "priority:medium" })
     @Description("Kiểm thử luồng tiêu cực (Negative): Kiểm tra các lỗi xác thực dữ liệu khi gửi đánh giá")
     @Severity(SeverityLevel.NORMAL)
     public void testSendReviewValidationErrors(ReviewData reviewData) {
@@ -66,22 +60,22 @@ public class ReviewTest extends BaseTest {
 
         // Kiểm tra và accept alert cảnh báo lỗi
         String alertText = productPage.getAlertTextAndAccept();
-        Assert.assertEquals(alertText, "Vui lòng kiểm tra lại thông tin đánh giá", "Cảnh báo lỗi chung bằng alert không hiển thị hoặc không chính xác!");
+        Assert.assertEquals(alertText, "Vui lòng kiểm tra lại thông tin đánh giá",
+                "Cảnh báo lỗi chung bằng alert không hiển thị hoặc không chính xác!");
 
         // Kiểm tra thông báo lỗi cụ thể hiển thị ngay dưới trường dữ liệu tương ứng
         if ("content".equalsIgnoreCase(reviewData.expectedErrorField)) {
             String contentError = productPage.getContentErrorText();
-            Assert.assertEquals(contentError, reviewData.expectedErrorMessage, "Lỗi hiển thị ở trường Nội dung không khớp!");
+            Assert.assertEquals(contentError, reviewData.expectedErrorMessage,
+                    "Lỗi hiển thị ở trường Nội dung không khớp!");
         } else if ("name".equalsIgnoreCase(reviewData.expectedErrorField)) {
             String nameError = productPage.getNameErrorText();
             Assert.assertEquals(nameError, reviewData.expectedErrorMessage, "Lỗi hiển thị ở trường Họ tên không khớp!");
         } else if ("phone".equalsIgnoreCase(reviewData.expectedErrorField)) {
             String phoneError = productPage.getPhoneErrorText();
-            Assert.assertEquals(phoneError, reviewData.expectedErrorMessage, "Lỗi hiển thị ở trường Số điện thoại không khớp!");
+            Assert.assertEquals(phoneError, reviewData.expectedErrorMessage,
+                    "Lỗi hiển thị ở trường Số điện thoại không khớp!");
         }
-        
-        // Đóng form đánh giá để hoàn thành test case
-        productPage.closeReviewModal();
+
     }
 }
-
