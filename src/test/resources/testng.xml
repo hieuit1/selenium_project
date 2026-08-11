@@ -14,6 +14,7 @@
             <class name="tests.CartTest" />
             <class name="tests.CheckoutTest" />
             <class name="tests.E2ETest" />
+            <class name="tests.BuildPCTest" />
         </classes>
     </test>
 </suite>
